@@ -28,16 +28,17 @@ $sText: 0.8em;
       text-align: center;
       .name-bussiness {
         border-bottom: 0.2mm solid #000;
-        padding-bottom: 10px;
+        padding-bottom: 22px;
         display: grid;
         place-items: center;
         position: relative;
         .img-logo {
           width: 85%;
           height: max-content;
+          fill: #fff !important;
         }
         .fil0 {
-          fill: rgb(0, 0, 0) !important;
+          fill: #fff !important;
         }
         .fnt0 {
           font-weight: bold !important;
