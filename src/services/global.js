@@ -8,7 +8,7 @@ export const tipoMoneda = "COP";
 export const confMoneda = "es-CO";
 export const simboloMoneda = "$";
 export const nameMoneda = "Pesos";
-export const ingresoDigital = "Transferencia Digital";
+export const ingresoDigital = "TRANSFERENCIA MOVIL";
 
 export const politicaAbandono = {
   mResaltado: "El plazo maximo para retirar las prendas es de 20 dias ",
