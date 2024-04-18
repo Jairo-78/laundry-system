@@ -83,9 +83,9 @@ const Reportes = () => {
       imgBack: rBPortafolio,
       type_show: "page",
       acceso: [Roles.ADMIN],
-      title: "Productos y Servicios",
+      title: "Servicios",
       descripcion:
-        "Listado Ordenes pendiente, tiempo en custodia, reenviar Almacen",
+        "Listado Servicions, (servicios +/- rentables) por precio y cantidad, exportacion a excel",
       page: `/${PrivateRoutes.PRIVATE}/${PrivateRoutes.REPORTE_PRODUCTOS}`,
     },
     {

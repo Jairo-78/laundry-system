@@ -33,8 +33,7 @@ $sText: 0.8em;
         place-items: center;
         position: relative;
         .img-logo {
-          // width: 80%;
-          width: 95%;
+          width: 85%;
           height: max-content;
         }
         .fil0 {
@@ -48,7 +47,7 @@ $sText: 0.8em;
         .data-text {
           position: absolute;
           bottom: -2px;
-          right: 20px;
+          right: 5px;
           span {
             font-size: 4mm !important;
             font-weight: 800;

@@ -3,8 +3,8 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from "react";
 import {
-  DiasAttencion,
-  HoraAttencion,
+  // DiasAttencion,
+  // HoraAttencion,
   handleGetInfoPago,
   roundDecimal,
 } from "../../../../../../../utils/functions";
@@ -151,31 +151,33 @@ const Ticket = React.forwardRef((props, ref) => {
               <div className="name-bussiness">
                 <Logo className="img-logo" />
                 <div className="data-text">
-                  {/* <h1>LAVANDERIA</h1>
-                  <h1 className="name">{InfoNegocio?.name}</h1> */}
-                  {InfoNegocio.numero.state ? (
-                    <span>telf : {InfoNegocio?.numero?.info}</span>
-                  ) : null}
+                  <span>NIT : 1088016709-4</span>
                 </div>
               </div>
               <table className="info-table">
                 <tbody>
                   <tr>
-                    <td>Local:</td>
+                    <td>Direccion:</td>
                     <td>{InfoNegocio?.direccion}</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>Horario:</td>
                     <td>
                       {Object.keys(InfoNegocio).length > 0 ? (
                         <>
                           {DiasAttencion(InfoNegocio?.horario.dias)}{" "}
                           {HoraAttencion(InfoNegocio?.horario.horas)}
-                          {/* <hr style={{ visibility: 'hidden' }} /> */}
                         </>
                       ) : null}
                     </td>
-                  </tr>
+                  </tr> */}
+
+                  {InfoNegocio.numero.state ? (
+                    <tr>
+                      <td>Telefono:</td>
+                      <td>{InfoNegocio?.numero?.info}</td>
+                    </tr>
+                  ) : null}
                 </tbody>
               </table>
             </div>
@@ -218,11 +220,15 @@ const Ticket = React.forwardRef((props, ref) => {
                   </tbody>
                 </table>
                 <div className="i-cliente">
+                  <div className="h-cli">
+                    <span>Nombres del CLIENTE</span>
+                    <h2>{infoOrden.Nombre}</h2>
+                  </div>
                   <table className="tb-info-cliente">
                     <tbody>
                       {infoOrden.celular ? (
                         <tr>
-                          <td>Telefono : </td>
+                          <td>Telefono de cliente : </td>
                           <td>&nbsp;&nbsp;{infoOrden.celular}</td>
                         </tr>
                       ) : null}
@@ -232,10 +238,6 @@ const Ticket = React.forwardRef((props, ref) => {
                       </tr>
                     </tbody>
                   </table>
-                  <div className="h-cli">
-                    <span>Nombres</span>
-                    <h2>{infoOrden.Nombre}</h2>
-                  </div>
                 </div>
               </div>
             </div>

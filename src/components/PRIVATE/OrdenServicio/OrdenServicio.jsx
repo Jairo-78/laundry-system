@@ -22,8 +22,7 @@ import "./ordernServicio.scss";
 import { ReactComponent as Eliminar } from "../../../utils/img/OrdenServicio/eliminar.svg";
 // import { ReactComponent as Lavadora } from '../../../utils/img/OrdenServicio/lavadora.svg';
 
-// import { ReactComponent as Logo } from "../../../utils/img/Logo/logoLavanderiaMuñoz.svg";
-import Logo from "../../../utils/img/Logo/logoLavanderiaMuñoz.png";
+import { ReactComponent as Logo } from "../../../utils/img/Logo/logoLavanderiaMuñoz.svg";
 
 import Tranferencia from "../../../utils/img/OrdenServicio/Transferencia.png";
 import Efectivo from "../../../utils/img/OrdenServicio/dinero.png";
@@ -904,15 +903,14 @@ const OrdenServicio = ({
           <div className="c-title">
             <div className="info-t">
               <div className="title">
-                {/* <Logo className="ico-logo" /> */}
-                <img src={Logo} className="ico-logo" />
-                {/* {Object.keys(InfoNegocio).length > 0 ? (
+                <Logo className="ico-logo" />
+                {Object.keys(InfoNegocio).length > 0 ? (
                   <h3>
                     {DiasAttencion(InfoNegocio?.horario.dias)}
                     <br />
                     {HoraAttencion(InfoNegocio?.horario.horas)}
                   </h3>
-                ) : null} */}
+                ) : null}
               </div>
             </div>
             <div className="n-recibo">
