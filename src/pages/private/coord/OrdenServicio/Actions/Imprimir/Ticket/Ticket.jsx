@@ -12,7 +12,7 @@ import "./ticket.scss";
 
 import Pet from "./pet.jpg";
 import AhorroPet from "./petAhorro.jpg";
-import { ReactComponent as Logo } from "../../../../../../../utils/img/Logo/logoRapiwash.svg";
+import { ReactComponent as Logo } from "../../../../../../../utils/img/Logo/logoLavanderiaMuñoz.svg";
 
 import moment from "moment";
 import axios from "axios";

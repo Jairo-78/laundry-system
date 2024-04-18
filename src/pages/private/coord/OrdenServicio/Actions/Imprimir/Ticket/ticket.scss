@@ -33,8 +33,9 @@ $sText: 0.8em;
         place-items: center;
         position: relative;
         .img-logo {
+          // width: 80%;
           width: 95%;
-          height: 75px;
+          height: max-content;
         }
         .fil0 {
           fill: rgb(0, 0, 0) !important;

@@ -4,7 +4,8 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { PrivateRoutes, Roles } from "../../../../models/index";
-import { ReactComponent as Logo } from "../../../../utils/img/Logo/logoRapiwash.svg";
+// import { ReactComponent as Logo } from "../../../../utils/img/Logo/logoLavanderiaMuñoz.svg";
+import Logo from "../../../../utils/img/Logo/logoLavanderiaMuñoz.png";
 import Logout from "../../Logout/Logout";
 import "./headerCoord.scss";
 import { oldOrder } from "../../../../services/global";
@@ -122,7 +123,8 @@ const HeaderUser = () => {
   return (
     <header className="header-general">
       <div className="logo">
-        <Logo className="svg-logo" />
+        {/* <Logo className="svg-logo" /> */}
+        <img src={Logo} className="svg-logo" />
       </div>
       <button type="button" className="hamburger" onClick={toggleNavBar}>
         <div className="line" />

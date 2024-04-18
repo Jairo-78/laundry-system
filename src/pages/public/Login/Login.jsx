@@ -12,7 +12,8 @@ import { modals } from "@mantine/modals";
 
 import { persistLocalStorage } from "../../../utils/persistence.local-storage/localStorage.util";
 import "./login.scss";
-import { ReactComponent as Logo } from "../../../utils/img/Logo/logoRapiwash.svg";
+// import { ReactComponent as Logo } from "../../../utils/img/Logo/logoLavanderiaMuñoz.svg";
+import Logo from "../../../utils/img/Logo/logoLavanderiaMuñoz.png";
 import axios from "axios";
 
 import { GetInfoUser } from "../../../redux/actions/aUser";
@@ -155,7 +156,8 @@ const Login = () => {
             <div className="card-3d-wrapper">
               <div className="card-front">
                 <div className="center-wrap">
-                  <Logo className="logo" />
+                  {/* <Logo className="logo" /> */}
+                  <img src={Logo} className="logo" />
                   <form onSubmit={handleLogin} className="section">
                     <h4>Iniciar Sesion</h4>
                     <div className="form-group">
