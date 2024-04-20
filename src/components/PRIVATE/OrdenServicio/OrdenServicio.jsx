@@ -172,6 +172,7 @@ const OrdenServicio = ({
         : mode === "Delivery" && iDelivery
         ? iDelivery.name
         : "",
+      direccion: iEdit ? iEdit.direccion : "",
       phone: iEdit ? iEdit.celular : "",
       dateRecojo: iEdit?.dateRecepcion?.fecha
         ? moment(
@@ -437,6 +438,7 @@ const OrdenServicio = ({
       Nombre: info.name,
       Items: infoIntem,
       celular: info.phone,
+      direccion: info.direccion,
       Pago: info.pago,
       ListPago: info.listPago,
       datePrevista: {
@@ -967,10 +969,18 @@ const OrdenServicio = ({
                 }}
               />
               <InputText
-                name={"phone"}
+                name="direccion"
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 tabI={"3"}
+                valueName={formik.values.direccion}
+                text={"Direccion:"}
+              />
+              <InputText
+                name={"phone"}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                tabI={"4"}
                 valueName={formik.values.phone}
                 text={"Celular:"}
               />
@@ -1013,7 +1023,7 @@ const OrdenServicio = ({
                     onChange={(date) => {
                       formik.setFieldValue("dateRecojo", date);
                     }}
-                    tabIndex={"4"}
+                    tabIndex={"5"}
                     disabled={
                       iEdit ? (iEdit.modeEditAll ? false : true) : false
                     }
@@ -1061,7 +1071,7 @@ const OrdenServicio = ({
                       <button
                         type="button"
                         className="btn-next"
-                        tabIndex="5"
+                        tabIndex="6"
                         disabled={
                           iEdit ? (iEdit.modeEditAll ? false : true) : false
                         }
@@ -1190,7 +1200,7 @@ const OrdenServicio = ({
                   ]);
                 }}
                 disabled={iEdit ? (iEdit.modeEditAll ? false : true) : false}
-                tabI={"9"}
+                tabI={"7"}
               />
             </div>
             <table className="tb-prod">

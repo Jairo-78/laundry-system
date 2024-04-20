@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Box, MultiSelect, Tooltip } from "@mantine/core";
+import { Box, MultiSelect, Textarea, Tooltip } from "@mantine/core";
 import { MonthPickerInput } from "@mantine/dates";
 import { MantineReactTable } from "mantine-react-table";
 
@@ -197,6 +197,27 @@ const List = () => {
         size: 80,
       },
       {
+        accessorKey: "Direccion",
+        header: "Direccion",
+        enableColumnFilter: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Direccion",
+        },
+        Cell: ({ cell }) =>
+          cell.getValue() ? (
+            <Textarea
+              autosize
+              minRows={1}
+              maxRows={3}
+              readOnly
+              value={cell.getValue()}
+            />
+          ) : (
+            ""
+          ),
+        size: 200,
+      },
+      {
         accessorKey: "Location",
         header: "Ubicacion",
         //enableSorting: false,
@@ -323,6 +344,7 @@ const List = () => {
           totalNeto: `${simboloMoneda} ${d.totalNeto}`,
           DNI: d.dni,
           Celular: d.celular,
+          Direccion: d.direccion,
           FechaEntrega: d.dateEntrega.fecha,
           FechaRecepcion: d.dateRecepcion.fecha,
           Descuento: d.descuento,

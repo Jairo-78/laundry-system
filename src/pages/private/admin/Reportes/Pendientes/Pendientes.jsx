@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 import ExcelJS from "exceljs";
-import { Modal, ScrollArea, Text } from "@mantine/core";
+import { Modal, ScrollArea, Text, Textarea } from "@mantine/core";
 import { MantineReactTable } from "mantine-react-table";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
@@ -121,6 +121,7 @@ const Pendientes = () => {
         attendedBy: d.attendedBy,
         totalNeto: d.totalNeto,
         Celular: d.celular,
+        Direccion: d.direccion ? d.direccion : "- SIN INFORMACION -",
         Pago: d.Pago,
         ListPago: d.ListPago,
         FechaPago: d.datePago,
@@ -165,6 +166,24 @@ const Pendientes = () => {
           placeholder: "Numero",
         },
         size: 100,
+      },
+      {
+        accessorKey: "Direccion",
+        header: "Direccion",
+        enableColumnFilter: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Direccion",
+        },
+        Cell: ({ cell }) => (
+          <Textarea
+            autosize
+            minRows={1}
+            maxRows={3}
+            readOnly
+            value={cell.getValue()}
+          />
+        ),
+        size: 200,
       },
       {
         accessorKey: "Pago",
@@ -283,6 +302,7 @@ const Pendientes = () => {
         "Pago",
         "Monto Facturado",
         "Items",
+        "Direccion",
         "Celular",
         "En Espera",
         "Fecha de Ingreso",
@@ -305,6 +325,7 @@ const Pendientes = () => {
         +item.totalNeto,
         itemsText,
         item.Celular ? item.Celular : "-",
+        item.Direccion ? item.Direccion : "-",
         item.onWaiting.showText,
         item.FechaIngreso.fecha,
       ]);

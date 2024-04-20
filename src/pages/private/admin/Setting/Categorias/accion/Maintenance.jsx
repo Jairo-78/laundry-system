@@ -27,7 +27,7 @@ const Maintenance = ({ info, cancelarEdit }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      tipo: "",
+      tipo: "Servicio",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -117,9 +117,8 @@ const Maintenance = ({ info, cancelarEdit }) => {
                 name="tipo"
                 size="sm"
                 label="Tipo"
-                readOnly={isEdit}
-                disabled={isEdit}
-                value={formik.values.tipo}
+                readOnly
+                defaultValue={formik.values.tipo}
                 onChange={(e) => {
                   formik.setFieldValue("tipo", e);
                 }}

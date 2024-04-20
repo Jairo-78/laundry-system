@@ -24,7 +24,7 @@ import {
 import { useSelector } from "react-redux";
 
 const Ticket = React.forwardRef((props, ref) => {
-  const { forW, infoOrden, InfoNegocio } = props;
+  const { showDescripcion, tipoTicket, infoOrden, InfoNegocio } = props;
   const [listPromos, setListPromos] = useState([]);
   const [sPago, setSPago] = useState();
 
@@ -226,6 +226,12 @@ const Ticket = React.forwardRef((props, ref) => {
                   </div>
                   <table className="tb-info-cliente">
                     <tbody>
+                      {infoOrden.direccion ? (
+                        <tr>
+                          <td>Direccion : </td>
+                          <td>&nbsp;&nbsp;{infoOrden.direccion}</td>
+                        </tr>
+                      ) : null}
                       {infoOrden.celular ? (
                         <tr>
                           <td>Telefono de cliente : </td>
@@ -247,9 +253,13 @@ const Ticket = React.forwardRef((props, ref) => {
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Item</th>
+                      <th>Servicio</th>
                       <th>Cantidad</th>
-                      <th>Total</th>
+                      {!tipoTicket ? (
+                        <>
+                          <th>Total</th>
+                        </>
+                      ) : null}
                     </tr>
                   </thead>
                   <tbody>
@@ -261,65 +271,74 @@ const Ticket = React.forwardRef((props, ref) => {
                           <td>•</td>
                           <td>{p.item}</td>
                           <td>{roundDecimal(p.cantidad)}</td>
-                          <td>{roundDecimal(p.total)}</td>
+                          {!tipoTicket ? (
+                            <>
+                              <td>{roundDecimal(p.total)}</td>
+                            </>
+                          ) : null}
                         </tr>
-                        {forW && p.descripcion ? (
+                        {showDescripcion && p.descripcion ? (
                           <tr className="fila_descripcion">
-                            <td colSpan="4">{spaceLine(p.descripcion)}</td>
+                            <td colSpan={!tipoTicket ? 4 : 3}>
+                              {spaceLine(p.descripcion)}
+                            </td>
                           </tr>
                         ) : null}
                       </React.Fragment>
                     ))}
                   </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colSpan="3">Subtotal :</td>
-                      <td>
-                        {roundDecimal(
-                          infoOrden.Items.reduce(
-                            (total, p) => total + parseFloat(p.total),
-                            0
-                          ) - montoDelivery(infoOrden)
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">Delivery :</td>
-                      <td>{montoDelivery(infoOrden)}</td>
-                    </tr>
-                    {infoOrden.factura ? (
+                  {!tipoTicket ? (
+                    <tfoot>
                       <tr>
-                        <td colSpan="3">
-                          {nameImpuesto} (
-                          {infoOrden.cargosExtras.igv.valor * 100} %) :
+                        <td colSpan="3">Subtotal :</td>
+                        <td>
+                          {roundDecimal(
+                            infoOrden.Items.reduce(
+                              (total, p) => total + parseFloat(p.total),
+                              0
+                            ) - montoDelivery(infoOrden)
+                          )}
                         </td>
-                        <td>{infoOrden.cargosExtras.igv.importe}</td>
                       </tr>
-                    ) : null}
-                    <tr>
-                      <td colSpan="3">Descuento :</td>
-                      <td>{infoOrden.descuento ? infoOrden.descuento : 0}</td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">Total a Pagar :</td>
-                      <td>{roundDecimal(infoOrden.totalNeto)}</td>
-                    </tr>
-                    {sPago?.estado === "Incompleto" ? (
-                      <>
+                      <tr>
+                        <td colSpan="3">Delivery :</td>
+                        <td>{montoDelivery(infoOrden)}</td>
+                      </tr>
+                      {infoOrden.factura ? (
                         <tr>
-                          <td colSpan="3">A Cuenta :</td>
-                          <td>{sPago?.pago}</td>
+                          <td colSpan="3">
+                            {nameImpuesto} (
+                            {infoOrden.cargosExtras.igv.valor * 100} %) :
+                          </td>
+                          <td>{infoOrden.cargosExtras.igv.importe}</td>
                         </tr>
-                        <tr>
-                          <td colSpan="3">Deuda Pendiente :</td>
-                          <td>{sPago?.falta}</td>
-                        </tr>
-                      </>
-                    ) : null}
-                  </tfoot>
+                      ) : null}
+                      <tr>
+                        <td colSpan="3">Descuento :</td>
+                        <td>{infoOrden.descuento ? infoOrden.descuento : 0}</td>
+                      </tr>
+                      <tr>
+                        <td colSpan="3">Total a Pagar :</td>
+                        <td>{roundDecimal(infoOrden.totalNeto)}</td>
+                      </tr>
+                      {sPago?.estado === "Incompleto" ? (
+                        <>
+                          <tr>
+                            <td colSpan="3">A Cuenta :</td>
+                            <td>{sPago?.pago}</td>
+                          </tr>
+                          <tr>
+                            <td colSpan="3">Deuda Pendiente :</td>
+                            <td>{sPago?.falta}</td>
+                          </tr>
+                        </>
+                      ) : null}
+                    </tfoot>
+                  ) : null}
                 </table>
                 {infoOrden.modoDescuento === "Promocion" &&
-                infoOrden.descuento > 0 ? (
+                infoOrden.descuento > 0 &&
+                !tipoTicket ? (
                   <div className="space-ahorro">
                     <h2 className="title">
                       ! Felicidades Ahorraste S/{infoOrden?.descuento} ¡
@@ -345,60 +364,71 @@ const Ticket = React.forwardRef((props, ref) => {
                 ) : null}
               </div>
             </div>
-            <div className="monto-final">
-              <h2>
-                Pago : {simboloMoneda}{" "}
-                {
-                  handleGetInfoPago(infoOrden.ListPago, infoOrden.totalNeto)
-                    .pago
-                }
-              </h2>
-              <h3 className={`${infoOrden.factura ? null : "sf"} estado`}>
-                {handleGetInfoPago(
-                  infoOrden.ListPago,
-                  infoOrden.totalNeto
-                ).estado.toUpperCase()}
-              </h3>
-              {infoOrden.factura ? (
-                <h2 className="cangeo-factura">
-                  Canjear Orden de Servicio por Factura
-                </h2>
-              ) : null}
-            </div>
-            <p className="aviso">
-              NOTA: <span>{politicaAbandono.mResaltado}</span>
-              {politicaAbandono.mGeneral}
-            </p>
-          </div>
-          {listPromos.length > 0 ? (
-            <div className="container-promociones">
-              {listPromos?.map((promo, index) => (
-                <div className="item-promo" key={index}>
-                  <div className="info-promo">
-                    <div>
-                      <h1>PROMOCION:</h1>
-                      <h2 style={{ fontSize: "0.8em", textAlign: "justify" }}>
-                        {promo.descripcion}
-                      </h2>
-                      <h2 className="cod-i">codigo: {promo.codigoCupon}</h2>
-                    </div>
-                    <div className="img-pet">
-                      <img src={Pet} alt="" />
-                    </div>
-                  </div>
-                  <div className="notice">
-                    <span>CÁNJEELO EN SU PRÓXIMA ORDEN</span>
-                  </div>
-                  <h2
-                    className="vigencia"
-                    style={{ float: "right", fontSize: "0.9em" }}
-                  >
-                    Vencimiento : {calcularFechaFutura(promo.vigencia)}
+            {!tipoTicket ? (
+              <>
+                <div className="monto-final">
+                  <h2>
+                    Pago : {simboloMoneda}{" "}
+                    {
+                      handleGetInfoPago(infoOrden.ListPago, infoOrden.totalNeto)
+                        .pago
+                    }
                   </h2>
+                  <h3 className={`${infoOrden.factura ? null : "sf"} estado`}>
+                    {handleGetInfoPago(
+                      infoOrden.ListPago,
+                      infoOrden.totalNeto
+                    ).estado.toUpperCase()}
+                  </h3>
+                  {infoOrden.factura ? (
+                    <h2 className="cangeo-factura">
+                      Canjear Orden de Servicio por Factura
+                    </h2>
+                  ) : null}
                 </div>
-              ))}
-            </div>
-          ) : null}
+                <p className="aviso">
+                  NOTA: <span>{politicaAbandono.mResaltado}</span>
+                  {politicaAbandono.mGeneral}
+                </p>
+                {listPromos.length > 0 ? (
+                  <div className="container-promociones">
+                    {listPromos?.map((promo, index) => (
+                      <div className="item-promo" key={index}>
+                        <div className="info-promo">
+                          <div>
+                            <h1>PROMOCION:</h1>
+                            <h2
+                              style={{
+                                fontSize: "0.8em",
+                                textAlign: "justify",
+                              }}
+                            >
+                              {promo.descripcion}
+                            </h2>
+                            <h2 className="cod-i">
+                              codigo: {promo.codigoCupon}
+                            </h2>
+                          </div>
+                          <div className="img-pet">
+                            <img src={Pet} alt="" />
+                          </div>
+                        </div>
+                        <div className="notice">
+                          <span>CÁNJEELO EN SU PRÓXIMA ORDEN</span>
+                        </div>
+                        <h2
+                          className="vigencia"
+                          style={{ float: "right", fontSize: "0.9em" }}
+                        >
+                          Vencimiento : {calcularFechaFutura(promo.vigencia)}
+                        </h2>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </>
+            ) : null}
+          </div>
         </div>
       ) : (
         <>
