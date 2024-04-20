@@ -22,11 +22,21 @@
         justify-content: space-between;
         .info-t {
           display: flex;
+          // LOGO --------------->
           .ico-logo {
-            width: 340px;
+            width: 406px;
             height: 149px;
+          }
+          #border-logo {
+            stroke: #7a7dbb;
+          }
+          #letter-logo {
             fill: #7a7dbb;
           }
+          #bg-logo {
+            fill: transparent;
+          }
+          // LOGO --------------->
           .fnt0 {
             font-weight: bold !important;
             font-size: 1173.97px !important;
@@ -35,37 +45,16 @@
           .title {
             padding: 0 10px 0 10px;
             position: relative;
-
-            h1 {
-              font-weight: bold;
-              font-size: 47px;
-              font-family: "Arial";
-              text-shadow: 2px 0 0 #989bd6ab,
-                10px 5px 10px rgba(56, 54, 54, 0.25),
-                10px 10px 10px rgba(83, 80, 80, 0.2),
-                20px 20px 20px rgba(88, 83, 83, 0.15);
-              color: #7a7dbb;
-              margin: 0;
-              text-align: right;
-              line-height: 1;
-            }
-
-            h2 {
-              color: #7a7dbb;
-              font-size: 15px;
-              margin: 0;
-              text-align: right;
-            }
           }
 
           h3 {
             color: #7a7dbb;
-            text-align: center;
             font-size: 15px;
-            margin: 0;
             position: absolute;
-            bottom: -18px;
-            right: 46px;
+            bottom: -35px;
+            text-align: center;
+            right: 0;
+            left: 0;
           }
         }
         .n-recibo {

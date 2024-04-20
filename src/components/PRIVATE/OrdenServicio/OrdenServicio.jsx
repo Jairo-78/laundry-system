@@ -908,8 +908,7 @@ const OrdenServicio = ({
                 <Logo className="ico-logo" />
                 {Object.keys(InfoNegocio).length > 0 ? (
                   <h3>
-                    {DiasAttencion(InfoNegocio?.horario.dias)}
-                    <br />
+                    {DiasAttencion(InfoNegocio?.horario.dias)} de &nbsp;
                     {HoraAttencion(InfoNegocio?.horario.horas)}
                   </h3>
                 ) : null}

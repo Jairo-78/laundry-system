@@ -28,7 +28,7 @@ $sText: 0.8em;
       text-align: center;
       .name-bussiness {
         border-bottom: 0.2mm solid #000;
-        padding-bottom: 22px;
+        padding-bottom: 28px;
         display: grid;
         place-items: center;
         position: relative;
@@ -37,20 +37,24 @@ $sText: 0.8em;
           height: max-content;
           fill: #fff !important;
         }
-        .fil0 {
-          fill: #fff !important;
+        // LOGO --------------->
+        #border-logo {
+          stroke: #000;
         }
-        .fnt0 {
-          font-weight: bold !important;
-          font-size: 1173.97px !important;
-          font-family: "Arial" !important;
+        #letter-logo {
+          fill: #000;
         }
+        #bg-logo {
+          fill: transparent;
+        }
+        // LOGO --------------->
         .data-text {
           position: absolute;
+          left: 0;
           bottom: -2px;
-          right: 5px;
+          right: 0;
           span {
-            font-size: 4mm !important;
+            font-size: 5mm !important;
             font-weight: 800;
           }
         }
@@ -72,8 +76,8 @@ $sText: 0.8em;
             }
 
             &:first-child {
-              width: 15mm;
-              padding-right: 15px;
+              width: 20mm;
+              padding-right: 10px;
             }
           }
         }

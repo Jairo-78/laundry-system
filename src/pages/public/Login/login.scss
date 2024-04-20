@@ -17,6 +17,17 @@ $input-placeholder-states: -webkit-, -moz-, -ms-;
     height: 95px;
     fill: #fff;
   }
+  // LOGO --------------->
+  #border-logo {
+    stroke: #fff;
+  }
+  #letter-logo {
+    fill: #fff;
+  }
+  #bg-logo {
+    fill: transparent;
+  }
+  // LOGO --------------->
   .fnt0 {
     font-weight: bold !important;
     font-size: 1173.97px !important;
