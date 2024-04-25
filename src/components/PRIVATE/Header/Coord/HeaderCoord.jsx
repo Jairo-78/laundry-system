@@ -152,7 +152,7 @@ const HeaderUser = () => {
               </li>
               <li>
                 <Link to={`./${PrivateRoutes.REGISTER_DELIVERY}`}>
-                  Delivery
+                  Domicilio
                 </Link>
               </li>
               <li>

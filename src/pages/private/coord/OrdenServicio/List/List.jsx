@@ -40,6 +40,7 @@ import {
   simboloMoneda,
   tipoMoneda,
 } from "../../../../../services/global";
+import { useRef } from "react";
 
 const List = () => {
   //Filtros de Fecha
@@ -61,6 +62,9 @@ const List = () => {
   const [rowPick, setRowPick] = useState();
 
   const [cPedidos, setCPedidos] = useState();
+
+  const [pressedRow, setPressedRow] = useState();
+  const timeoutRowRef = useRef(null);
 
   const infoMetas = useSelector((state) => state.metas.infoMetas);
 
@@ -390,16 +394,6 @@ const List = () => {
     setFiltroClientes(event.target.value);
   };
 
-  // const handleFAnulados = (event) => {
-  //   if (event.target.value === "Esconder") {
-  //     setInfoRegistrado(
-  //       infoRegistrado.filter((item) => item.EstadoPrenda !== "anulado")
-  //     );
-  //   } else {
-  //     handleGetFactura(registered);
-  //   }
-  // };
-
   const handleMonthPickerChange = useCallback(
     (date) => {
       const startDate = moment.utc(date).startOf("month").format("YYYY-MM-DD");
@@ -457,6 +451,39 @@ const List = () => {
     const ancho = ctx.measureText(texto).width;
 
     return ancho;
+  };
+
+  const handleSelectRow = (rowInfo) => {
+    if (InfoUsuario.rol !== Roles.PERS) {
+      setRowPick(rowInfo);
+      if (
+        rowInfo.EstadoPrenda === "anulado" ||
+        rowInfo.EstadoPrenda === "donado"
+      ) {
+        setChangePago(false);
+      } else if (
+        rowInfo.EstadoPrenda === "entregado" &&
+        rowInfo.FechaEntrega !== DateCurrent().format4
+      ) {
+        setChangePago(false);
+      } else {
+        setChangePago(true);
+      }
+    }
+  };
+
+  const handleTouchEndRow = () => {
+    setPressedRow(null);
+    clearTimeout(timeoutRowRef.current);
+  };
+
+  const handleTouchStartRow = (rowInfo) => {
+    setPressedRow(rowInfo?.Id);
+
+    timeoutRowRef.current = setTimeout(() => {
+      setPressedRow(null);
+      handleSelectRow(rowInfo);
+    }, 1500);
   };
 
   useEffect(() => {
@@ -564,24 +591,11 @@ const List = () => {
             },
           })}
           mantineTableBodyRowProps={({ row }) => ({
-            onDoubleClick: () => {
-              if (InfoUsuario.rol !== Roles.PERS) {
-                setRowPick(row.original);
-                if (
-                  row.original.EstadoPrenda === "anulado" ||
-                  row.original.EstadoPrenda === "donado"
-                ) {
-                  setChangePago(false);
-                } else if (
-                  row.original.EstadoPrenda === "entregado" &&
-                  row.original.FechaEntrega !== DateCurrent().format4
-                ) {
-                  setChangePago(false);
-                } else {
-                  setChangePago(true);
-                }
-              }
-            },
+            onDoubleClick: () => handleSelectRow(row.original),
+            onTouchStart: () => handleTouchStartRow(row.original),
+            onTouchMove: () => handleTouchEndRow(),
+            onTouchEnd: () => handleTouchEndRow(),
+
             sx: {
               backgroundColor:
                 row.original.EstadoPrenda === "entregado"
@@ -591,6 +605,9 @@ const List = () => {
                   : row.original.EstadoPrenda === "donado"
                   ? "#f377f94d"
                   : "",
+              border:
+                pressedRow === row.original.Id ? "2px solid #6582ff" : "none",
+              userSelect: "none",
             },
           })}
           enableStickyHeader={true}
@@ -610,6 +627,11 @@ const List = () => {
               src={row.original.Notas?.length > 0 ? DetalleM : Detalle}
               alt="detalle"
               onDoubleClick={(e) => {
+                e.stopPropagation();
+                setRowPick(row.original);
+                setDetailEdit(true);
+              }}
+              onTouchStart={(e) => {
                 e.stopPropagation();
                 setRowPick(row.original);
                 setDetailEdit(true);
