@@ -4,7 +4,10 @@ import "./cuadreCaja.scss";
 import axios from "axios";
 import Portal from "../../../../../components/PRIVATE/Portal/Portal";
 import { Fragment } from "react";
-import { redondearNumero } from "../../../../../utils/functions/formatNumber/formatNumber";
+import {
+  formatNumberMoneda,
+  redondearNumero,
+} from "../../../../../utils/functions/formatNumber/formatNumber";
 import { ingresoDigital, simboloMoneda } from "../../../../../services/global";
 import ExcelJS from "exceljs";
 import { cLetter } from "../../../../../utils/functions";
@@ -228,7 +231,7 @@ const CuadreCaja = () => {
     <div className="report-container">
       <div className="title-h">
         <h1>Reporte de Cuadres Diarios</h1>
-        {InfoUsuario.rol === Roles.ADMIN && infoCuadres.length > 0 ? (
+        {/* {InfoUsuario.rol === Roles.ADMIN && infoCuadres.length > 0 ? (
           <button
             className={`button_wrapper ${loading ? "loading" : ""}`}
             onClick={handleExport}
@@ -249,7 +252,7 @@ const CuadreCaja = () => {
               </svg>
             </div>
           </button>
-        ) : null}
+        ) : null} */}
       </div>
 
       <div className="action-h">
@@ -498,8 +501,11 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.cajaInicial
+                                  {formatNumberMoneda(
+                                    +redondearNumero(
+                                      cuadresTransformados[rowIndex]
+                                        ?.cajaInicial
+                                    )
                                   )}
                                 </td>
                                 <td
@@ -516,27 +522,10 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.ingresos
-                                      .efectivo
-                                  )}
-                                </td>
-                                <td
-                                  style={{
-                                    borderTop:
-                                      rowIndex === 0
-                                        ? `solid 1px ${colorBorder}`
-                                        : "none",
-                                    borderBottom:
-                                      rowIndex === numFilas - 1
-                                        ? `solid 1px ${colorBorder}`
-                                        : "none",
-                                  }}
-                                  className="fila"
-                                >
-                                  {redondearNumero(
-                                    sumarValores(
-                                      cuadresTransformados[rowIndex]?.egresos
+                                  {formatNumberMoneda(
+                                    +redondearNumero(
+                                      cuadresTransformados[rowIndex]?.ingresos
+                                        .efectivo
                                     )
                                   )}
                                 </td>
@@ -553,8 +542,12 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.montoCaja
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      sumarValores(
+                                        cuadresTransformados[rowIndex]?.egresos
+                                      )
+                                    )
                                   )}
                                 </td>
                                 <td
@@ -570,8 +563,10 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.corte
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      cuadresTransformados[rowIndex]?.montoCaja
+                                    )
                                   )}
                                 </td>
                                 <td
@@ -587,8 +582,29 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.cajaFinal
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      cuadresTransformados[rowIndex]?.corte
+                                    )
+                                  )}
+                                </td>
+                                <td
+                                  style={{
+                                    borderTop:
+                                      rowIndex === 0
+                                        ? `solid 1px ${colorBorder}`
+                                        : "none",
+                                    borderBottom:
+                                      rowIndex === numFilas - 1
+                                        ? `solid 1px ${colorBorder}`
+                                        : "none",
+                                  }}
+                                  className="fila"
+                                >
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      cuadresTransformados[rowIndex]?.cajaFinal
+                                    )
                                   )}
                                 </td>
                               </>
@@ -622,8 +638,10 @@ const CuadreCaja = () => {
                               }}
                               className="fila"
                             >
-                              {Math.abs(
-                                cuadresTransformados[rowIndex]?.margenError
+                              {formatNumberMoneda(
+                                +Math.abs(
+                                  cuadresTransformados[rowIndex]?.margenError
+                                )
                               )}
                             </td>
                             <td
@@ -669,9 +687,11 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.ingresos
-                                      .transferencia
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      cuadresTransformados[rowIndex]?.ingresos
+                                        .transferencia
+                                    )
                                   )}
                                 </td>
                                 <td
@@ -688,9 +708,11 @@ const CuadreCaja = () => {
                                   }}
                                   className="fila"
                                 >
-                                  {redondearNumero(
-                                    cuadresTransformados[rowIndex]?.ingresos
-                                      .tarjeta
+                                  {formatNumberMoneda(
+                                    redondearNumero(
+                                      cuadresTransformados[rowIndex]?.ingresos
+                                        .tarjeta
+                                    )
                                   )}
                                 </td>
                               </>
@@ -733,7 +755,9 @@ const CuadreCaja = () => {
                           rowSpan={cuadresTransformados[rowIndex]?.length}
                         >
                           {ingresosTotales
-                            ? redondearNumero(ingresosTotales)
+                            ? formatNumberMoneda(
+                                redondearNumero(ingresosTotales)
+                              )
                             : ""}
                         </td>
                         <td
@@ -744,7 +768,9 @@ const CuadreCaja = () => {
                           rowSpan={cuadresTransformados[rowIndex]?.length}
                         >
                           {egresosTotales
-                            ? redondearNumero(egresosTotales)
+                            ? formatNumberMoneda(
+                                redondearNumero(egresosTotales)
+                              )
                             : ""}
                         </td>
                         <td

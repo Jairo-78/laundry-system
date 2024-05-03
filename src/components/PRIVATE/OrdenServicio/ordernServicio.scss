@@ -407,7 +407,7 @@
           tr {
             position: relative;
             display: grid;
-            grid-template-columns: 100px 170px 300px 100px 40px;
+            grid-template-columns: 100px 250px 300px 150px 40px;
           }
           thead {
             border: 1px solid #4671ea;
@@ -903,12 +903,12 @@
                   position: relative;
                   font-size: 20px;
                   padding: 10px 0;
-                  &:nth-child(3) {
-                    text-align: center;
-                  }
+
                   &:nth-child(4) {
                     font-weight: 600;
                     text-align: center;
+                    position: absolute;
+                    right: 5px;
                   }
                 }
               }
@@ -951,6 +951,10 @@
         }
       }
     }
+  }
+  .mantine-Select-dropdown {
+    width: max-content !important;
+    left: -140px !important;
   }
 }
 

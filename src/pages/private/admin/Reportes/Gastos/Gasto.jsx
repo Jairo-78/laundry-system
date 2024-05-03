@@ -97,7 +97,7 @@ const Gasto = ({ onClose }) => {
             item.tipo,
             trasformeDate(item.fecha) + "\n" + item.hora,
             item.descripcion,
-            `${simboloMoneda}${item.monto}`,
+            +item.monto,
             item.infoUser.name,
           ]);
 

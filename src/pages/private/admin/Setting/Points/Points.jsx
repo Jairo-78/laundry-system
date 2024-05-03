@@ -65,7 +65,7 @@ const Points = () => {
             name="valor"
             label={`Valor en ${nameMoneda} :`}
             value={formik.values.valor}
-            precision={0}
+            precision={2}
             onChange={(e) => {
               formik.setFieldValue("valor", !Number.isNaN(e) ? e : 0);
             }}

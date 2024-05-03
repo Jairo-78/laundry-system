@@ -1,4 +1,8 @@
-import { simboloMoneda } from "../../../services/global";
+import {
+  confMoneda,
+  simboloMoneda,
+  tipoMoneda,
+} from "../../../services/global";
 
 export function formatValue(value) {
   const isNumericValue = !Number.isNaN(parseFloat(value));
@@ -41,4 +45,26 @@ export function redondearNumero(input) {
       return base;
     }
   }
+}
+
+export function formatNumberMoneda(number, money) {
+  // Verificamos si el número es válido
+  if (typeof number !== "number" || isNaN(number)) {
+    return ""; // Si el número no es válido, devolvemos una cadena vacía
+  }
+
+  // Formateamos el número utilizando toLocaleString() con las opciones adecuadas
+  const formattedNumber = number.toLocaleString(confMoneda, {
+    style: "currency",
+    currency: tipoMoneda,
+    minimumIntegerDigits: 1,
+    minimumFractionDigits: 0,
+  });
+
+  // Si includeCurrencySymbol es false, eliminamos el símbolo de la moneda del resultado
+  if (!money) {
+    return formattedNumber.replace(simboloMoneda, "");
+  }
+
+  return formattedNumber;
 }

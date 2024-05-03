@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { TextInput } from '@mantine/core';
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import Nota from '../Nota/Nota';
-import { DateCurrent } from '../../../../../utils/functions';
+import { TextInput } from "@mantine/core";
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Nota from "../Nota/Nota";
+import {
+  DateCurrent,
+  formatNumberMoneda,
+} from "../../../../../utils/functions";
 
 const FinalBalanceStyle = styled.div`
   display: grid;
@@ -47,7 +50,7 @@ const FinalBalanceStyle = styled.div`
       &::before,
       &::after {
         position: absolute;
-        content: '';
+        content: "";
         left: 0;
         top: 0;
         height: 100%;
@@ -98,22 +101,32 @@ const FinalBalance = ({
     <FinalBalanceStyle>
       <h1>Finaliza el cuadre con :</h1>
       <div className="form-fb">
-        <TextInput label="Monto en Caja" radius="md" value={totalCaja} readOnly />
+        <TextInput
+          label="Monto en Caja"
+          radius="md"
+          value={formatNumberMoneda(+totalCaja)}
+          readOnly
+        />
         <TextInput
           label="Corte"
           radius="md"
           disabled={sDisabledCuadre}
-          value={infoState?.corte}
+          value={formatNumberMoneda(+infoState?.corte)}
           onChange={(e) => {
             const inputValue = e.target.value;
-            const numericValue = inputValue.replace(/[^0-9.]/g, ''); // Filtrar caracteres no numéricos, permitiendo el punto decimal
+            const numericValue = inputValue.replace(/[^0-9.]/g, ""); // Filtrar caracteres no numéricos, permitiendo el punto decimal
 
             handleChangeCorte(numericValue);
           }}
         />
-        <TextInput label="Caja Final" radius="md" value={cajaFinal} readOnly />
+        <TextInput
+          label="Caja Final"
+          radius="md"
+          value={formatNumberMoneda(+cajaFinal)}
+          readOnly
+        />
       </div>
-      <h1>Se hace Entrega de {infoState?.corte}</h1>
+      <h1>Se hace Entrega de {formatNumberMoneda(+infoState?.corte, true)}</h1>
       {!sDisabledCuadre ? (
         <div className="action-end">
           <button
@@ -139,7 +152,7 @@ const FinalBalance = ({
           </button>
         </div>
       )}
-      <div style={{ pointerEvents: sDisabledCuadre ? 'none' : 'auto' }}>
+      <div style={{ pointerEvents: sDisabledCuadre ? "none" : "auto" }}>
         <Nota
           onMode={savedActivated} // Cambiar el diseño si se va a generar el PDF
           setMode={handleSavedActivated} // Si se cancela el PDF vuelve el diseño Original

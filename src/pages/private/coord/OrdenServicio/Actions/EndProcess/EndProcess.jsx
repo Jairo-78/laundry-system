@@ -12,6 +12,7 @@ import {
 } from "../../../../../../redux/actions/aOrdenServices";
 import {
   DateCurrent,
+  formatNumberMoneda,
   handleGetInfoPago,
 } from "../../../../../../utils/functions";
 
@@ -411,7 +412,10 @@ const EndProcess = ({ IdCliente, onClose }) => {
                             </div>
                             <div className="monto">
                               <span>
-                                {simboloMoneda} {infoCliente.totalNeto}
+                                {formatNumberMoneda(
+                                  +infoCliente.totalNeto,
+                                  true
+                                )}
                               </span>
                             </div>
                           </div>
@@ -423,7 +427,7 @@ const EndProcess = ({ IdCliente, onClose }) => {
                               </div>
                               <div className="monto">
                                 <span>
-                                  {simboloMoneda} {estadoPago.pago}
+                                  {formatNumberMoneda(+estadoPago.pago, true)}
                                 </span>
                               </div>
                             </div>
@@ -435,7 +439,7 @@ const EndProcess = ({ IdCliente, onClose }) => {
                           </div>
                           <div className="monto">
                             <span>
-                              {simboloMoneda} {estadoPago.falta}
+                              {formatNumberMoneda(+estadoPago.falta, true)}
                             </span>
                           </div>
                         </div>

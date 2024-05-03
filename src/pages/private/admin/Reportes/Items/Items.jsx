@@ -10,6 +10,7 @@ import { MonthPickerInput } from "@mantine/dates";
 import moment from "moment";
 import { Roles } from "../../../../../models";
 import { useSelector } from "react-redux";
+import { formatNumberMoneda } from "../../../../../utils/functions";
 
 const Items = () => {
   const [data, setData] = useState([]);
@@ -320,7 +321,7 @@ const Items = () => {
               ) : (
                 <tspan x="50">
                   {valorizarX === "montoGenerado"
-                    ? `${simboloMoneda} ${d.value}`
+                    ? `${formatNumberMoneda(d.value, true)}`
                     : `${d.value} ${d.data.simboloMedida} `}
                 </tspan>
               );
@@ -333,7 +334,7 @@ const Items = () => {
               legendOffset: -40,
             }}
             axisBottom={{
-              tickValues: 3,
+              tickValues: 1,
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
@@ -386,9 +387,7 @@ const Items = () => {
                         {item.cantidad} {item.simboloMedida}
                       </td>
                       {InfoUsuario.rol === Roles.ADMIN ? (
-                        <td>
-                          {simboloMoneda} {item.montoGenerado}
-                        </td>
+                        <td>{formatNumberMoneda(+item.montoGenerado, true)}</td>
                       ) : null}
                     </tr>
                   ))}

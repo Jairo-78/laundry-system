@@ -45,6 +45,7 @@ import {
   DateCurrent,
   DiasAttencion,
   HoraAttencion,
+  formatNumberMoneda,
   handleGetInfoPago,
 } from "../../../utils/functions";
 import SwitchModel from "../../SwitchModel/SwitchModel";
@@ -915,7 +916,7 @@ const OrdenServicio = ({
               </div>
             </div>
             <div className="n-recibo">
-              <h2>RECIBO</h2>
+              <h2>Factura</h2>
               <h1>
                 N° {String(iEdit ? iEdit.codRecibo : iCodigo).padStart(6, "0")}
               </h1>
@@ -943,7 +944,7 @@ const OrdenServicio = ({
                   );
                   formik.setFieldValue("name", cliente.nombre);
                   formik.setFieldValue("phone", cliente.phone);
-
+                  formik.setFieldValue("direccion", cliente.direccion);
                   setDataScore(cliente);
                 }}
                 data={
@@ -1366,7 +1367,7 @@ const OrdenServicio = ({
                       </div>
                     </td>
                     <td>
-                      <input
+                      {/* <input
                         type="text"
                         className="txtTotal"
                         name={`items.${index}.total`}
@@ -1385,6 +1386,29 @@ const OrdenServicio = ({
                         }}
                         disabled={row.disable.total}
                         value={formik.values.items[index].total}
+                        required
+                      /> */}
+                      <NumberInput
+                        name={`items.${index}.total`}
+                        className="txtTotal"
+                        value={+formik.values.items[index].total}
+                        disabled={row.disable.total}
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        formatter={(value) =>
+                          !Number.isNaN(parseFloat(value))
+                            ? `${value}`.replace(
+                                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                ","
+                              )
+                            : ""
+                        }
+                        onChange={(value) => {
+                          formik.setFieldValue(`items.${index}.total`, value);
+                        }}
+                        min={0}
+                        step={1}
+                        hideControls
+                        autoComplete="off"
                         required
                       />
                     </td>
@@ -1414,13 +1438,13 @@ const OrdenServicio = ({
                 <tr style={{ marginTop: "10px" }}>
                   <td>
                     {dataScore && Object.keys(dataScore).length > 0
-                      ? `Total de Puntos : ${dataScore.scoreTotal}`
+                      ? `Total de Puntos : ${formatNumberMoneda(
+                          dataScore.scoreTotal
+                        )}`
                       : null}
                   </td>
                   <td>Subtotal :</td>
-                  <td>
-                    {simboloMoneda} {formik.values.subTotal}
-                  </td>
+                  <td>{formatNumberMoneda(formik.values.subTotal, true)}</td>
                   <td></td>
                 </tr>
                 <tr>
@@ -1432,10 +1456,15 @@ const OrdenServicio = ({
                         <label>Dsc x Puntos</label>
                         <NumberInput
                           value={formik.values.cargosExtras.beneficios.puntos}
-                          max={parseInt(dataScore.scoreTotal)}
-                          min={0}
-                          step={1}
-                          hideControls={true}
+                          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                          formatter={(value) =>
+                            !Number.isNaN(parseFloat(value))
+                              ? `${value}`.replace(
+                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              : ""
+                          }
                           onChange={(e) => {
                             const data =
                               dataScore.scoreTotal < e ? false : true;
@@ -1448,6 +1477,11 @@ const OrdenServicio = ({
                               e
                             );
                           }}
+                          min={0}
+                          step={1}
+                          max={parseInt(dataScore.scoreTotal)}
+                          hideControls
+                          autoComplete="off"
                         />
                       </div>
                     ) : null}
@@ -1459,7 +1493,10 @@ const OrdenServicio = ({
                         {formik.values.cargosExtras.igv.valor * 100} %) :
                       </td>
                       <td>
-                        {simboloMoneda} {formik.values.cargosExtras.igv.importe}
+                        {formatNumberMoneda(
+                          formik.values.cargosExtras.igv.importe,
+                          true
+                        )}
                       </td>
                     </>
                   ) : (
@@ -1474,17 +1511,13 @@ const OrdenServicio = ({
                 <tr>
                   <td></td>
                   <td>Descuento :</td>
-                  <td>
-                    {simboloMoneda} {formik.values.descuento}
-                  </td>
+                  <td>{formatNumberMoneda(formik.values.descuento, true)}</td>
                   <td></td>
                 </tr>
                 <tr>
                   <td></td>
                   <td>Total :</td>
-                  <td>
-                    {simboloMoneda} {formik.values.totalNeto}
-                  </td>
+                  <td>{formatNumberMoneda(+formik.values.totalNeto, true)}</td>
                   <td></td>
                 </tr>
               </tfoot>
@@ -1553,7 +1586,7 @@ const OrdenServicio = ({
                         <td>{index + 1}</td>
                         <td>{pago.metodoPago}</td>
                         <td>{pago.date.fecha}</td>
-                        <td>{pago.total}</td>
+                        <td>{formatNumberMoneda(+pago.total, true)}</td>
                         <td className="space-action">
                           {DateCurrent().format4 === pago.date.fecha &&
                           pago.idUser === InfoUsuario._id ? (
@@ -1645,7 +1678,7 @@ const OrdenServicio = ({
                       <thead>
                         <tr>
                           <th>N°</th>
-                          <th>Orden de Servicio</th>
+                          <th>N° de Factura</th>
                           <th>Fecha</th>
                           <th>Score</th>
                         </tr>
@@ -1667,7 +1700,7 @@ const OrdenServicio = ({
                                 }`,
                               }}
                             >
-                              {row.score}
+                              {formatNumberMoneda(+row.score)}
                             </td>
                           </tr>
                         ))}
@@ -1676,7 +1709,9 @@ const OrdenServicio = ({
                     <div className="footer-info">
                       <div className="text-info">
                         <span>Total de Puntos :</span>
-                        <label htmlFor="">{dataScore.scoreTotal}</label>
+                        <label htmlFor="">
+                          {formatNumberMoneda(dataScore.scoreTotal)}
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -1710,7 +1745,7 @@ const OrdenServicio = ({
                             <tr key={index}>
                               <td>{cupon.codigoCupon}</td>
                               <td>{cupon.descripcion}</td>
-                              <td>{cupon.descuento}</td>
+                              <td>{formatNumberMoneda(+cupon.descuento)}</td>
                               <Tag
                                 Etiqueta="td"
                                 className="space-action"
@@ -1741,12 +1776,15 @@ const OrdenServicio = ({
                           <tr>
                             <td></td>
                             <td></td>
-                            <td>Total :</td>
+                            <td></td>
                             <td>
-                              {simboloMoneda}{" "}
-                              {listCupones.reduce(
-                                (total, cupon) => total + cupon.descuento,
-                                0
+                              Total : &nbsp;&nbsp;
+                              {formatNumberMoneda(
+                                listCupones.reduce(
+                                  (total, cupon) => total + cupon.descuento,
+                                  0
+                                ),
+                                true
                               )}
                             </td>
                           </tr>

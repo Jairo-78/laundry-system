@@ -86,7 +86,25 @@ const List = () => {
           placeholder: "Cliente",
         },
         //enableSorting: false,
+        size: 150,
+      },
+      {
+        accessorKey: "Celular",
+        header: "Celular",
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Numero",
+        },
         size: 100,
+      },
+      {
+        accessorKey: "DNI",
+        header: documento,
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: documento,
+        },
+        size: 120,
       },
       {
         accessorKey: "Modalidad",
@@ -132,12 +150,22 @@ const List = () => {
             readOnly
           />
         ),
-        size: 190,
+        size: 250,
       },
       {
         accessorKey: "PParcial",
         header: "Monto Cobrado",
         //enableSorting: false,
+        Cell: ({ cell }) => (
+          <Box>
+            {cell.getValue()?.toLocaleString?.(confMoneda, {
+              style: "currency",
+              currency: tipoMoneda,
+              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
+              minimumFractionDigits: 0, // Mínimo 2 dígitos después del separador decimal
+            })}
+          </Box>
+        ),
         mantineFilterTextInputProps: {
           placeholder: "Monto",
         },
@@ -180,8 +208,8 @@ const List = () => {
             {cell.getValue()?.toLocaleString?.(confMoneda, {
               style: "currency",
               currency: tipoMoneda,
+              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
               minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
             })}
           </Box>
         ),
@@ -189,17 +217,9 @@ const List = () => {
         mantineFilterTextInputProps: {
           placeholder: "Total",
         },
-        size: 70,
+        size: 130,
       },
-      {
-        accessorKey: "Celular",
-        header: "Celular",
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: "Numero",
-        },
-        size: 80,
-      },
+
       {
         accessorKey: "Direccion",
         header: "Direccion",
@@ -280,15 +300,7 @@ const List = () => {
         },
         size: 120,
       },
-      {
-        accessorKey: "DNI",
-        header: documento,
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: documento,
-        },
-        size: 80,
-      },
+
       {
         accessorKey: "onWaiting",
         header: "Orden en Espera...",
@@ -343,9 +355,9 @@ const List = () => {
           Nombre: d.Nombre,
           Modalidad: d.Modalidad,
           Producto: handleItemsCantidad(d.Items),
-          PParcial: `${simboloMoneda} ${estadoPago.pago}`,
+          PParcial: estadoPago.pago,
           Pago: d.Pago.toUpperCase(),
-          totalNeto: `${simboloMoneda} ${d.totalNeto}`,
+          totalNeto: +d.totalNeto,
           DNI: d.dni,
           Celular: d.celular,
           Direccion: d.direccion,
@@ -599,11 +611,11 @@ const List = () => {
             sx: {
               backgroundColor:
                 row.original.EstadoPrenda === "entregado"
-                  ? "#77f9954d"
+                  ? "#77f995"
                   : row.original.EstadoPrenda === "anulado"
-                  ? "#f856564d"
+                  ? "#f85656"
                   : row.original.EstadoPrenda === "donado"
-                  ? "#f377f94d"
+                  ? "#f377f9"
                   : "",
               border:
                 pressedRow === row.original.Id ? "2px solid #6582ff" : "none",

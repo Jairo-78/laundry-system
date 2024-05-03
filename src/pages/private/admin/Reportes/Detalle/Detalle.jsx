@@ -14,6 +14,7 @@ import { simboloMoneda } from "../../../../../services/global";
 import {
   DateDetail_Hora,
   cLetter,
+  formatNumberMoneda,
   handleGetInfoPago,
 } from "../../../../../utils/functions";
 
@@ -107,9 +108,7 @@ const Detalle = ({ infoD }) => {
                 <span>{handleDescDelivery(e.descripcion)}</span>
               </div>
               <div className="cant_d">
-                <span>
-                  {simboloMoneda} {e.monto}
-                </span>
+                <span>{formatNumberMoneda(+e.monto, true)}</span>
               </div>
             </div>
           ))}
@@ -197,7 +196,7 @@ const Detalle = ({ infoD }) => {
                   </div>
                 </div>
               </td>
-              <td>{p.total}</td>
+              <td>{formatNumberMoneda(+p.total, true)}</td>
             </tr>
           ))}
         </tbody>
@@ -217,7 +216,9 @@ const Detalle = ({ infoD }) => {
               <span>Factura</span>
             </div>
             <div className="monto">
-              <span>{ordern?.CargosExtras.igv.importe}</span>
+              <span>
+                {formatNumberMoneda(+ordern?.CargosExtras.igv.importe, true)}
+              </span>
             </div>
           </div>
         ) : null}
@@ -227,15 +228,13 @@ const Detalle = ({ infoD }) => {
               <span>Descuento</span>
             </div>
             <div className="monto">
-              <span>
-                {simboloMoneda} {ordern?.Descuento}
-              </span>
+              <span>{formatNumberMoneda(+ordern?.Descuento, true)}</span>
             </div>
           </div>
         ) : null}
       </div>
       <div className="more-a">
-        <h3>Total: {ordern?.totalNeto}</h3>
+        <h3>Total: {formatNumberMoneda(+ordern?.totalNeto, true)}</h3>
       </div>
       <div className="list-pagos">
         <div className="title">Lista de Pagos</div>
@@ -246,8 +245,7 @@ const Detalle = ({ infoD }) => {
                 {DateDetail_Hora(p.date.fecha, p.date.hora)}
               </span>
               <span className="_monto">
-                {simboloMoneda}
-                {p.total}
+                {formatNumberMoneda(+p.total, true)}
               </span>
               <span className="_metodopago">{cLetter(p.metodoPago)}</span>
               <span>{handleInfoUser(p.idUser)}</span>
@@ -270,10 +268,7 @@ const Detalle = ({ infoD }) => {
                 <div className="l-info">
                   <span>Subtotal :</span>
                 </div>
-                <div>
-                  {simboloMoneda}
-                  {statePago?.pago}
-                </div>
+                <div>{formatNumberMoneda(+statePago?.pago, true)}</div>
               </div>
               <div>
                 <div className="l-info">
@@ -286,10 +281,7 @@ const Detalle = ({ infoD }) => {
                   <div className="l-info">
                     <span>Falta :</span>
                   </div>
-                  <div>
-                    {simboloMoneda}
-                    {statePago?.falta}
-                  </div>
+                  <div>{formatNumberMoneda(+statePago?.falta, true)}</div>
                 </div>
               ) : null}
             </span>

@@ -40,7 +40,11 @@ import {
   nameImpuesto,
   simboloMoneda,
 } from "../../../../../services/global";
-import { DateCurrent, handleGetInfoPago } from "../../../../../utils/functions";
+import {
+  DateCurrent,
+  formatNumberMoneda,
+  handleGetInfoPago,
+} from "../../../../../utils/functions";
 import ButtonSwitch from "../../../../../components/PRIVATE/MetodoPago/ButtonSwitch/ButtonSwitch";
 
 const AddOld = () => {
@@ -203,8 +207,6 @@ const AddOld = () => {
         action: isDelivery,
       },
     };
-
-    console.log(newRow);
 
     return newRow;
   };
@@ -831,28 +833,26 @@ const AddOld = () => {
                         </div>
                       </td>
                       <td>
-                        <input
-                          type="text"
-                          className="txtTotal"
+                        <NumberInput
                           name={`items.${index}.total`}
-                          autoComplete="off"
-                          onChange={(e) => {
-                            const inputValue = e.target.value;
-                            const validInput = inputValue
-                              ? inputValue.replace(/[^0-9.]/g, "")
-                              : "";
-
-                            formik.setFieldValue(
-                              `items.${index}.total`,
-                              validInput
-                            );
-                          }}
-                          onBlur={formik.handleBlur}
-                          disabled={row.disable.total}
+                          className="txtTotal"
                           value={formik.values.items[index].total}
-                          onFocus={(e) => {
-                            e.target.select();
+                          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                          formatter={(value) =>
+                            !Number.isNaN(parseFloat(value))
+                              ? `${value}`.replace(
+                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              : ""
+                          }
+                          onChange={(value) => {
+                            formik.setFieldValue(`items.${index}.total`, value);
                           }}
+                          min={0}
+                          step={1}
+                          hideControls
+                          autoComplete="off"
                         />
                       </td>
                       <Tag
@@ -880,9 +880,7 @@ const AddOld = () => {
                   <tr style={{ marginTop: "10px" }}>
                     <td></td>
                     <td>Subtotal :</td>
-                    <td>
-                      {simboloMoneda} {formik.values.subTotal}
-                    </td>
+                    <td>{formatNumberMoneda(formik.values.subTotal, true)}</td>
                     <td></td>
                   </tr>
                   <tr>
@@ -893,8 +891,10 @@ const AddOld = () => {
                           {nameImpuesto} ({(impuesto * 100).toFixed(0)} %) :
                         </td>
                         <td>
-                          {simboloMoneda}{" "}
-                          {formik.values.cargosExtras.igv.importe}
+                          {formatNumberMoneda(
+                            formik.values.cargosExtras.igv.importe,
+                            true
+                          )}
                         </td>
                       </>
                     ) : (
@@ -913,7 +913,7 @@ const AddOld = () => {
                     <td></td>
                     <td>Total :</td>
                     <td>
-                      {simboloMoneda} {formik.values.totalNeto}
+                      {formatNumberMoneda(+formik.values.totalNeto, true)}
                     </td>
                     <td></td>
                   </tr>
@@ -958,7 +958,11 @@ const AddOld = () => {
                   ) : null}
                 </div>
                 {iPago ? (
-                  <div className="info-pago">{`${iPago.metodoPago} ${simboloMoneda}${iPago.total} : ${formik.values.pago}`}</div>
+                  <div className="info-pago">{`${
+                    iPago.metodoPago
+                  } ${formatNumberMoneda(+iPago.total, true)} : ${
+                    formik.values.pago
+                  }`}</div>
                 ) : null}
               </div>
             </div>

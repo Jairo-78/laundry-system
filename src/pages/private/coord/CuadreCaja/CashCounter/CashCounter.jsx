@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components';
-import { simboloMoneda } from '../../../../../services/global';
-import { NumberInput } from '@mantine/core';
-import { useEffect } from 'react';
-import { DateCurrent } from '../../../../../utils/functions';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
+import React from "react";
+import styled from "styled-components";
+import { simboloMoneda } from "../../../../../services/global";
+import { NumberInput } from "@mantine/core";
+import { useEffect } from "react";
+import {
+  DateCurrent,
+  formatNumberMoneda,
+} from "../../../../../utils/functions";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 const CashCounterStyle = styled.div`
   margin: auto;
@@ -112,7 +115,7 @@ const CashCounterStyle = styled.div`
         height: 30px;
         color: #3d44c9;
         border-radius: 7px;
-        font-family: 'PT Sans', sans-serif;
+        font-family: "PT Sans", sans-serif;
         font-weight: bold;
         background: transparent;
         outline: 0;
@@ -125,7 +128,7 @@ const CashCounterStyle = styled.div`
           display: inline-block;
           font-size: 18px;
           padding: auto;
-          font-family: 'PT Sans', sans-serif;
+          font-family: "PT Sans", sans-serif;
           font-weight: bold;
           color: #67688a77;
         }
@@ -134,7 +137,13 @@ const CashCounterStyle = styled.div`
   }
 `;
 
-const CashCounter = ({ ListMontos, totalCaja, handleChangeTotalCaja, handleChangeMontos, sDisabledCuadre }) => {
+const CashCounter = ({
+  ListMontos,
+  totalCaja,
+  handleChangeTotalCaja,
+  handleChangeMontos,
+  sDisabledCuadre,
+}) => {
   const handleCalculateTotalNeto = (Montos) => {
     let totalNeto = 0;
     if (Montos && Montos.length > 0) {
@@ -166,14 +175,12 @@ const CashCounter = ({ ListMontos, totalCaja, handleChangeTotalCaja, handleChang
           {ListMontos?.map((mS, index) => (
             <tr key={index}>
               <td>
-                <label htmlFor="">
-                  {simboloMoneda} {mS.monto}
-                </label>
+                <label htmlFor="">{formatNumberMoneda(mS.monto, true)}</label>
               </td>
               <td>
                 <NumberInput
                   name="codigo"
-                  value={mS.cantidad ? parseFloat(mS.cantidad) : ''}
+                  value={mS.cantidad ? parseFloat(mS.cantidad) : ""}
                   precision={0}
                   onChange={(e) => {
                     const updatedMontos = [...ListMontos];
@@ -194,7 +201,7 @@ const CashCounter = ({ ListMontos, totalCaja, handleChangeTotalCaja, handleChang
               </td>
               <td>
                 <label htmlFor="">
-                  {simboloMoneda} {parseFloat(mS.total.toFixed(1))}
+                  {formatNumberMoneda(parseFloat(mS.total.toFixed(1)), true)}
                 </label>
               </td>
             </tr>
@@ -203,8 +210,8 @@ const CashCounter = ({ ListMontos, totalCaja, handleChangeTotalCaja, handleChang
       </table>
       <div className="footer-info">
         <div className="input-number">
-          <label>Total S./</label>
-          <input
+          <label>Total : </label>
+          {/* <input
             id="input-descuento"
             name="descuento"
             type="text"
@@ -212,6 +219,21 @@ const CashCounter = ({ ListMontos, totalCaja, handleChangeTotalCaja, handleChang
             autoComplete="off"
             value={totalCaja}
             readOnly
+          /> */}
+          <NumberInput
+            id="input-descuento"
+            name="descuento"
+            placeholder="Descuento..."
+            autoComplete="off"
+            value={+totalCaja}
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            formatter={(value) =>
+              !Number.isNaN(parseFloat(value))
+                ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                : ""
+            }
+            readOnly
+            hideControls
           />
         </div>
       </div>

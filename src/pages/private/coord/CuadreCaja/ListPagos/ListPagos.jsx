@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components';
-import { ingresoDigital } from '../../../../../services/global';
+import React from "react";
+import styled from "styled-components";
+import { ingresoDigital } from "../../../../../services/global";
+import { formatNumberMoneda } from "../../../../../utils/functions";
 
 const InfoExtra = styled.div`
   display: flex;
@@ -205,7 +206,12 @@ const InfoExtra = styled.div`
   }
 `;
 
-const ListPagos = ({ iGastos, iClienteEfectivo, iClienteTarjeta, iClienteTransferencia }) => {
+const ListPagos = ({
+  iGastos,
+  iClienteEfectivo,
+  iClienteTarjeta,
+  iClienteTransferencia,
+}) => {
   return (
     <InfoExtra>
       <div className="efectivo tb-info">
@@ -223,11 +229,16 @@ const ListPagos = ({ iGastos, iClienteEfectivo, iClienteTarjeta, iClienteTransfe
               </thead>
               <tbody>
                 {iClienteEfectivo.map((cliente, index) => (
-                  <tr key={index} className={`${cliente.estadoPrenda === 'anulado' ? 'mode-anulado' : null}`}>
+                  <tr
+                    key={index}
+                    className={`${
+                      cliente.estadoPrenda === "anulado" ? "mode-anulado" : null
+                    }`}
+                  >
                     <td>{cliente.codRecibo}</td>
                     <td>{cliente.Modalidad}</td>
                     <td>{cliente.Nombre}</td>
-                    <td>{cliente.total}</td>
+                    <td>{formatNumberMoneda(+cliente.total)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -253,13 +264,15 @@ const ListPagos = ({ iGastos, iClienteEfectivo, iClienteTarjeta, iClienteTransfe
                     <tr
                       key={index}
                       //style={{ background: gasto._state === 'anulado' ? '#ff686847' : '#fff' }}
-                      className={`${gasto._state === 'anulado' ? 'mode-anulado' : null}`}
+                      className={`${
+                        gasto._state === "anulado" ? "mode-anulado" : null
+                      }`}
                     >
                       <td>{gasto.descripcion}</td>
                       <td>
                         {gasto.fecha} / {gasto.hora}
                       </td>
-                      <td>{gasto.monto}</td>
+                      <td>{formatNumberMoneda(+gasto.monto)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -285,12 +298,16 @@ const ListPagos = ({ iGastos, iClienteEfectivo, iClienteTarjeta, iClienteTransfe
                     <tr
                       key={index}
                       // style={{ background: cliente.estadoPrenda === 'anulado' ? '#ff686847' : '#fff' }}
-                      className={`${cliente.estadoPrenda === 'anulado' ? 'mode-anulado' : null}`}
+                      className={`${
+                        cliente.estadoPrenda === "anulado"
+                          ? "mode-anulado"
+                          : null
+                      }`}
                     >
                       <td>{cliente.codRecibo}</td>
                       <td>{cliente.Modalidad}</td>
                       <td>{cliente.Nombre}</td>
-                      <td>{cliente.total}</td>
+                      <td>{formatNumberMoneda(+cliente.total)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -313,11 +330,18 @@ const ListPagos = ({ iGastos, iClienteEfectivo, iClienteTarjeta, iClienteTransfe
                 </thead>
                 <tbody>
                   {iClienteTarjeta.map((cliente, index) => (
-                    <tr key={index} className={`${cliente.estadoPrenda === 'anulado' ? 'mode-anulado' : null}`}>
+                    <tr
+                      key={index}
+                      className={`${
+                        cliente.estadoPrenda === "anulado"
+                          ? "mode-anulado"
+                          : null
+                      }`}
+                    >
                       <td>{cliente.codRecibo}</td>
                       <td>{cliente.Modalidad}</td>
                       <td>{cliente.Nombre}</td>
-                      <td>{cliente.total}</td>
+                      <td>{formatNumberMoneda(+cliente.total)}</td>
                     </tr>
                   ))}
                 </tbody>

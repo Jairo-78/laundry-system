@@ -3,6 +3,7 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from "react";
 import {
+  formatNumberMoneda,
   // DiasAttencion,
   // HoraAttencion,
   handleGetInfoPago,
@@ -19,7 +20,6 @@ import axios from "axios";
 import {
   nameImpuesto,
   politicaAbandono,
-  simboloMoneda,
 } from "../../../../../../../services/global";
 import { useSelector } from "react-redux";
 
@@ -188,7 +188,7 @@ const Ticket = React.forwardRef((props, ref) => {
             <div className="info-client">
               <div className="cod-rec">
                 <p className="l-text">
-                  ORDEN DE SERVICIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  NUMERO DE FACTURA &nbsp;&nbsp;&nbsp;&nbsp;
                   <span>N° {String(infoOrden.codRecibo).padStart(4, "0")}</span>
                 </p>
               </div>
@@ -277,7 +277,9 @@ const Ticket = React.forwardRef((props, ref) => {
                           <td>{roundDecimal(p.cantidad)}</td>
                           {!tipoTicket ? (
                             <>
-                              <td>{roundDecimal(p.total)}</td>
+                              <td>
+                                {formatNumberMoneda(+roundDecimal(p.total))}
+                              </td>
                             </>
                           ) : null}
                         </tr>
@@ -296,17 +298,19 @@ const Ticket = React.forwardRef((props, ref) => {
                       <tr>
                         <td colSpan="3">Subtotal :</td>
                         <td>
-                          {roundDecimal(
-                            infoOrden.Items.reduce(
-                              (total, p) => total + parseFloat(p.total),
-                              0
-                            ) - montoDelivery(infoOrden)
+                          {formatNumberMoneda(
+                            +roundDecimal(
+                              infoOrden.Items.reduce(
+                                (total, p) => total + parseFloat(p.total),
+                                0
+                              ) - montoDelivery(infoOrden)
+                            )
                           )}
                         </td>
                       </tr>
                       <tr>
                         <td colSpan="3">Delivery :</td>
-                        <td>{montoDelivery(infoOrden)}</td>
+                        <td>{formatNumberMoneda(montoDelivery(infoOrden))}</td>
                       </tr>
                       {infoOrden.factura ? (
                         <tr>
@@ -314,26 +318,38 @@ const Ticket = React.forwardRef((props, ref) => {
                             {nameImpuesto} (
                             {infoOrden.cargosExtras.igv.valor * 100} %) :
                           </td>
-                          <td>{infoOrden.cargosExtras.igv.importe}</td>
+                          <td>
+                            {formatNumberMoneda(
+                              +infoOrden.cargosExtras.igv.importe
+                            )}
+                          </td>
                         </tr>
                       ) : null}
                       <tr>
                         <td colSpan="3">Descuento :</td>
-                        <td>{infoOrden.descuento ? infoOrden.descuento : 0}</td>
+                        <td>
+                          {formatNumberMoneda(
+                            infoOrden.descuento ? +infoOrden.descuento : 0
+                          )}
+                        </td>
                       </tr>
                       <tr>
                         <td colSpan="3">Total a Pagar :</td>
-                        <td>{roundDecimal(infoOrden.totalNeto)}</td>
+                        <td>
+                          {formatNumberMoneda(
+                            +roundDecimal(infoOrden.totalNeto)
+                          )}
+                        </td>
                       </tr>
                       {sPago?.estado === "Incompleto" ? (
                         <>
                           <tr>
                             <td colSpan="3">A Cuenta :</td>
-                            <td>{sPago?.pago}</td>
+                            <td>{formatNumberMoneda(sPago?.pago)}</td>
                           </tr>
                           <tr>
                             <td colSpan="3">Deuda Pendiente :</td>
-                            <td>{sPago?.falta}</td>
+                            <td>{formatNumberMoneda(sPago?.falta)}</td>
                           </tr>
                         </>
                       ) : null}
@@ -345,8 +361,8 @@ const Ticket = React.forwardRef((props, ref) => {
                 !tipoTicket ? (
                   <div className="space-ahorro">
                     <h2 className="title">
-                      ! Felicidades Ahorraste {simboloMoneda}
-                      {infoOrden?.descuento} ¡
+                      ! Felicidades Ahorraste
+                      {formatNumberMoneda(+infoOrden?.descuento)} ¡
                     </h2>
                     <div className="info-promo">
                       <span>Usando nuestras promociones :</span>
@@ -373,11 +389,12 @@ const Ticket = React.forwardRef((props, ref) => {
               <>
                 <div className="monto-final">
                   <h2>
-                    Pago : {simboloMoneda}{" "}
-                    {
+                    Pago :{" "}
+                    {formatNumberMoneda(
                       handleGetInfoPago(infoOrden.ListPago, infoOrden.totalNeto)
-                        .pago
-                    }
+                        .pago,
+                      true
+                    )}
                   </h2>
                   <h3 className={`${infoOrden.factura ? null : "sf"} estado`}>
                     {handleGetInfoPago(

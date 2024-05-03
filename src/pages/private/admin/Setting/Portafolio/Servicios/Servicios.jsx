@@ -7,7 +7,11 @@ import { Box, Button, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
 import "./servicios.scss";
-import { simboloMoneda } from "../../../../../../services/global";
+import {
+  confMoneda,
+  simboloMoneda,
+  tipoMoneda,
+} from "../../../../../../services/global";
 import Portal from "../../../../../../components/PRIVATE/Portal/Portal";
 import Maintenance from "./accion/Maintenance";
 import { getInfoCategoria } from "../utilsPortafolio";
@@ -66,7 +70,12 @@ const Servicios = () => {
         },
         Cell: ({ cell }) => (
           <Box>
-            {simboloMoneda} {cell.getValue()}
+            {cell.getValue()?.toLocaleString?.(confMoneda, {
+              style: "currency",
+              currency: tipoMoneda,
+              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
+              minimumFractionDigits: 0, // Mínimo 2 dígitos después del separador decimal
+            })}
           </Box>
         ),
       },
