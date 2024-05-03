@@ -693,31 +693,31 @@ const AddOld = () => {
                           disabled={row.disable.cantidad}
                           onChange={(e) => {
                             const inputValue = e.target.value;
-                            console.log(inputValue);
-                            const validInput = inputValue.replace(
-                              /[^0-9.]/g,
+                            const validInput = inputValue
+                              ? inputValue.replace(/[^0-9.]/g, "")
+                              : "";
+
+                            // Garantizar que no haya más de un punto decimal
+                            const validQuantity = validInput.replace(
+                              /\.(?=.*\.)/g,
                               ""
-                            ); // Remueve todo excepto los números y el punto
-                            const newQuantity = parseFloat(validInput); // Convierte la cadena a un número de punto flotante
+                            );
+
+                            const newQuantity =
+                              validInput !== "" ? validQuantity : "";
 
                             const price =
-                              parseFloat(formik.values.items[index].price) || 0; // Precio del artículo
+                              parseFloat(formik.values.items[index].price) || 0;
+                            const newTotal =
+                              newQuantity !== "" ? newQuantity * price : "";
 
-                            let newTotal = ""; // Inicializa la nueva cantidad total
-
-                            // Verifica si newQuantity es un número válido y calcula el total
-                            if (!isNaN(newQuantity)) {
-                              newTotal = (newQuantity * price).toFixed(1); // Calcula el total y lo redondea a 1 decimal
-                            }
-
-                            // Actualiza los valores de cantidad y total en el formulario
                             formik.setFieldValue(
                               `items.${index}.cantidad`,
-                              isNaN(newQuantity) ? "" : +newQuantity // Si newQuantity no es un número válido, asigna una cadena vacía
+                              newQuantity
                             );
                             formik.setFieldValue(
                               `items.${index}.total`,
-                              +newTotal // Asigna el total calculado al campo total
+                              newTotal !== "" ? +newTotal.toFixed(1) : ""
                             );
                           }}
                           autoFocus={true}
