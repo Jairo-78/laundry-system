@@ -114,7 +114,8 @@ const FinalBalance = ({
           value={formatNumberMoneda(+infoState?.corte)}
           onChange={(e) => {
             const inputValue = e.target.value;
-            const numericValue = inputValue.replace(/[^0-9.]/g, ""); // Filtrar caracteres no numéricos, permitiendo el punto decimal
+            console.log(inputValue);
+            const numericValue = inputValue.replace(/[^0-9]/g, ""); // Filtrar caracteres no numéricos, permitiendo el punto decimal
 
             handleChangeCorte(numericValue);
           }}
