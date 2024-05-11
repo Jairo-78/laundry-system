@@ -520,7 +520,8 @@ const AddOld = () => {
                       formik.setFieldValue("datePrevista", date);
                     }}
                     placeholder="Ingrese Fecha"
-                    maxDate={moment().subtract(1, "day").toDate()}
+                    // maxDate={moment().subtract(1, "day").toDate()}
+                    maxDate={moment().toDate()}
                     //onNextYear
                   />
                   {formik.errors.dateRecojo &&
