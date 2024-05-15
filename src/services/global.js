@@ -35,3 +35,4 @@ export const MONTOS_BASE = [
   { monto: 500, cantidad: "", total: 0 },
   { monto: 200, cantidad: "", total: 0 },
   { monto: 100, cantidad: "", total: 0 },
+];
