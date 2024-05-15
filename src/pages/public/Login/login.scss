@@ -19,6 +19,17 @@ $input-placeholder-states: -webkit-, -moz-, -ms-;
     fill: #fff;
     stroke: #fff;
   }
+  // LOGO --------------->
+  #border-logo {
+    stroke: #fff;
+  }
+  #letter-logo {
+    fill: #fff;
+  }
+  #bg-logo {
+    fill: transparent;
+  }
+  // LOGO --------------->
   a {
     cursor: pointer;
     transition: all 200ms linear;

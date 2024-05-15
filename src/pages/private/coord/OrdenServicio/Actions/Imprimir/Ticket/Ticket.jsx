@@ -213,6 +213,10 @@ const Ticket = React.forwardRef((props, ref) => {
                 <table className="info-table">
                   <tbody>
                     <tr>
+                      <td>NIT:</td>
+                      <td className="m-line">1088016709-4</td>
+                    </tr>
+                    <tr>
                       <td>Direccion:</td>
                       <td>{InfoNegocio?.direccion}</td>
                     </tr>
@@ -229,14 +233,6 @@ const Ticket = React.forwardRef((props, ref) => {
                         ))}
                       </td>
                     </tr>
-                    <tr>
-                      <td>Horario:</td>
-                      <td className="m-line">
-                        {InfoNegocio.horario.map((hor, index) => (
-                          <span key={index}>{hor.horario}</span>
-                        ))}
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               )}
@@ -244,7 +240,7 @@ const Ticket = React.forwardRef((props, ref) => {
             <div className="info-client">
               <div className="cod-rec">
                 <p className="l-text">
-                  <span className="title-o">ORDEN DE SERVICIO</span>
+                  <span className="title-o">NUMERO DE FACTURA</span>
                   <span className="number-o">
                     N° {String(infoOrden.codRecibo).padStart(4, "0")}
                   </span>
