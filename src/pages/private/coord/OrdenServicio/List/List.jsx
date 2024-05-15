@@ -19,6 +19,7 @@ import {
   handleGetInfoPago,
   handleOnWaiting,
   handleItemsCantidad,
+  formatThousandsSeparator,
 } from "../../../../../utils/functions/index";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -87,7 +88,25 @@ const List = () => {
           placeholder: "Cliente",
         },
         //enableSorting: false,
+        size: 150,
+      },
+      {
+        accessorKey: "Celular",
+        header: "Celular",
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Numero",
+        },
         size: 100,
+      },
+      {
+        accessorKey: "DNI",
+        header: documento,
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: documento,
+        },
+        size: 120,
       },
       {
         accessorKey: "Modalidad",
@@ -133,12 +152,15 @@ const List = () => {
             readOnly
           />
         ),
-        size: 190,
+        size: 250,
       },
       {
         accessorKey: "PParcial",
         header: "Monto Cobrado",
         //enableSorting: false,
+        Cell: ({ cell }) => (
+          <Box>{formatThousandsSeparator(cell.getValue(), true)}</Box>
+        ),
         mantineFilterTextInputProps: {
           placeholder: "Monto",
         },
@@ -157,20 +179,19 @@ const List = () => {
           data: [
             {
               value: "COMPLETO",
-              label: "Completo",
+              label: "COMPLETO",
             },
             {
               value: "INCOMPLETO",
-              label: "Incompleto",
+              label: "INCOMPLETO",
             },
             {
               value: "PENDIENTE",
-              label: "Pendiente",
+              label: "PENDIENTE",
             },
           ],
         },
         enableEditing: false,
-        Cell: ({ cell }) => <Box>{cell.getValue().toUpperCase()}</Box>,
         size: 150,
       },
       {
@@ -178,30 +199,15 @@ const List = () => {
         header: "Total",
         //enableSorting: false,
         Cell: ({ cell }) => (
-          <Box>
-            {cell.getValue()?.toLocaleString?.(confMoneda, {
-              style: "currency",
-              currency: tipoMoneda,
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}
-          </Box>
+          <Box>{formatThousandsSeparator(cell.getValue(), true)}</Box>
         ),
         enableEditing: false,
         mantineFilterTextInputProps: {
           placeholder: "Total",
         },
-        size: 70,
+        size: 130,
       },
-      {
-        accessorKey: "Celular",
-        header: "Celular",
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: "Numero",
-        },
-        size: 80,
-      },
+
       {
         accessorKey: "Direccion",
         header: "Direccion",
@@ -282,15 +288,7 @@ const List = () => {
         },
         size: 120,
       },
-      {
-        accessorKey: "DNI",
-        header: documento,
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: documento,
-        },
-        size: 80,
-      },
+
       {
         accessorKey: "onWaiting",
         header: "Orden en Espera...",
@@ -350,9 +348,9 @@ const List = () => {
           Nombre: d.Nombre,
           Modalidad: d.Modalidad,
           items: handleItemsCantidad(listItems),
-          PParcial: `${simboloMoneda} ${estadoPago.pago}`,
+          PParcial: estadoPago.pago,
           Pago: estadoPago.estado,
-          totalNeto: `${simboloMoneda} ${d.totalNeto}`,
+          totalNeto: d.totalNeto,
           DNI: d.dni,
           Celular: d.celular,
           Direccion: d.direccion,
