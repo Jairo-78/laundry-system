@@ -6,12 +6,7 @@ import styled from "styled-components";
 import { simboloMoneda } from "../../../../../services/global";
 import { NumberInput } from "@mantine/core";
 import { useEffect } from "react";
-import {
-  DateCurrent,
-  formatNumberMoneda,
-} from "../../../../../utils/functions";
-import { useSelector } from "react-redux";
-import moment from "moment";
+import { formatThousandsSeparator } from "../../../../../utils/functions";
 
 const CashCounterStyle = styled.div`
   margin: auto;
@@ -154,7 +149,7 @@ const CashCounter = ({
       }, 0);
     }
 
-    handleChangeTotalCaja(totalNeto.toFixed(2));
+    handleChangeTotalCaja(totalNeto);
   };
 
   useEffect(() => {
@@ -175,12 +170,14 @@ const CashCounter = ({
           {ListMontos?.map((mS, index) => (
             <tr key={index}>
               <td>
-                <label htmlFor="">{formatNumberMoneda(mS.monto, true)}</label>
+                <label htmlFor="">
+                  {simboloMoneda} {mS.monto}
+                </label>
               </td>
               <td>
                 <NumberInput
                   name="codigo"
-                  value={mS.cantidad ? parseFloat(mS.cantidad) : ""}
+                  value={mS.cantidad ? +mS.cantidad : ""}
                   precision={0}
                   onChange={(e) => {
                     const updatedMontos = [...ListMontos];
@@ -188,7 +185,7 @@ const CashCounter = ({
                       ...updatedMontos[index],
                     };
                     updatedMonto.cantidad = e;
-                    updatedMonto.total = mS.monto * e;
+                    updatedMonto.total = (mS.monto * e).toFixed(2);
                     updatedMontos[index] = updatedMonto;
                     handleChangeMontos(updatedMontos);
                   }}
@@ -201,7 +198,7 @@ const CashCounter = ({
               </td>
               <td>
                 <label htmlFor="">
-                  {formatNumberMoneda(parseFloat(mS.total.toFixed(1)), true)}
+                  {formatThousandsSeparator(+mS.total, true)}
                 </label>
               </td>
             </tr>
@@ -210,30 +207,15 @@ const CashCounter = ({
       </table>
       <div className="footer-info">
         <div className="input-number">
-          <label>Total : </label>
-          {/* <input
+          <label>Total S./</label>
+          <input
             id="input-descuento"
             name="descuento"
             type="text"
             placeholder="Descuento..."
             autoComplete="off"
-            value={totalCaja}
+            value={formatThousandsSeparator(totalCaja)}
             readOnly
-          /> */}
-          <NumberInput
-            id="input-descuento"
-            name="descuento"
-            placeholder="Descuento..."
-            autoComplete="off"
-            value={+totalCaja}
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            formatter={(value) =>
-              !Number.isNaN(parseFloat(value))
-                ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-                : ""
-            }
-            readOnly
-            hideControls
           />
         </div>
       </div>

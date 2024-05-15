@@ -58,7 +58,9 @@
 
 .portal-redirect-ps {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px 33px 0px 9px;
 }
 
 .portal-setting-validation {

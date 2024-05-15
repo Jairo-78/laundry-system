@@ -65,6 +65,7 @@ const List = () => {
 
   const [pressedRow, setPressedRow] = useState();
   const timeoutRowRef = useRef(null);
+  const iDelivery = useSelector((state) => state.servicios.serviceDelivery);
 
   const infoMetas = useSelector((state) => state.metas.infoMetas);
 
@@ -86,25 +87,7 @@ const List = () => {
           placeholder: "Cliente",
         },
         //enableSorting: false,
-        size: 150,
-      },
-      {
-        accessorKey: "Celular",
-        header: "Celular",
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: "Numero",
-        },
         size: 100,
-      },
-      {
-        accessorKey: "DNI",
-        header: documento,
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: documento,
-        },
-        size: 120,
       },
       {
         accessorKey: "Modalidad",
@@ -138,10 +121,10 @@ const List = () => {
         size: 100,
       },
       {
-        accessorKey: "Producto",
-        header: "Producto",
+        accessorKey: "items",
+        header: "Items",
         mantineFilterTextInputProps: {
-          placeholder: "Producto",
+          placeholder: "Item",
         },
         Cell: ({ cell }) => (
           <MultiSelect
@@ -150,22 +133,12 @@ const List = () => {
             readOnly
           />
         ),
-        size: 250,
+        size: 190,
       },
       {
         accessorKey: "PParcial",
         header: "Monto Cobrado",
         //enableSorting: false,
-        Cell: ({ cell }) => (
-          <Box>
-            {cell.getValue()?.toLocaleString?.(confMoneda, {
-              style: "currency",
-              currency: tipoMoneda,
-              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
-              minimumFractionDigits: 0, // Mínimo 2 dígitos después del separador decimal
-            })}
-          </Box>
-        ),
         mantineFilterTextInputProps: {
           placeholder: "Monto",
         },
@@ -184,19 +157,20 @@ const List = () => {
           data: [
             {
               value: "COMPLETO",
-              label: "COMPLETO",
+              label: "Completo",
             },
             {
               value: "INCOMPLETO",
-              label: "INCOMPLETO",
+              label: "Incompleto",
             },
             {
               value: "PENDIENTE",
-              label: "PENDIENTE",
+              label: "Pendiente",
             },
           ],
         },
         enableEditing: false,
+        Cell: ({ cell }) => <Box>{cell.getValue().toUpperCase()}</Box>,
         size: 150,
       },
       {
@@ -208,8 +182,8 @@ const List = () => {
             {cell.getValue()?.toLocaleString?.(confMoneda, {
               style: "currency",
               currency: tipoMoneda,
-              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
               minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
             })}
           </Box>
         ),
@@ -217,9 +191,17 @@ const List = () => {
         mantineFilterTextInputProps: {
           placeholder: "Total",
         },
-        size: 130,
+        size: 70,
       },
-
+      {
+        accessorKey: "Celular",
+        header: "Celular",
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Numero",
+        },
+        size: 80,
+      },
       {
         accessorKey: "Direccion",
         header: "Direccion",
@@ -300,7 +282,15 @@ const List = () => {
         },
         size: 120,
       },
-
+      {
+        accessorKey: "DNI",
+        header: documento,
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: documento,
+        },
+        size: 80,
+      },
       {
         accessorKey: "onWaiting",
         header: "Orden en Espera...",
@@ -342,22 +332,27 @@ const List = () => {
           d.estadoPrenda === "donado"
             ? d.donationDate.fecha
             : d.dateEntrega.fecha;
+
         const onWaiting = await handleOnWaiting(
           d.dateRecepcion.fecha,
           d.estadoPrenda,
           dateEndProcess
         );
+
+        const listItems = d.Items.filter(
+          (item) => item.identificador !== iDelivery?._id
+        );
         const estadoPago = handleGetInfoPago(d.ListPago, d.totalNeto);
 
         const structureData = {
           Id: d._id,
-          Recibo: String(d.codRecibo).padStart(6, "0"),
+          Recibo: String(d.codRecibo).padStart(4, "0"),
           Nombre: d.Nombre,
           Modalidad: d.Modalidad,
-          Producto: handleItemsCantidad(d.Items),
-          PParcial: estadoPago.pago,
-          Pago: d.Pago.toUpperCase(),
-          totalNeto: +d.totalNeto,
+          items: handleItemsCantidad(listItems),
+          PParcial: `${simboloMoneda} ${estadoPago.pago}`,
+          Pago: estadoPago.estado,
+          totalNeto: `${simboloMoneda} ${d.totalNeto}`,
           DNI: d.dni,
           Celular: d.celular,
           Direccion: d.direccion,
@@ -611,15 +606,15 @@ const List = () => {
             sx: {
               backgroundColor:
                 row.original.EstadoPrenda === "entregado"
-                  ? "#77f995"
+                  ? "#77f9954d"
                   : row.original.EstadoPrenda === "anulado"
-                  ? "#f85656"
+                  ? "#f856564d"
                   : row.original.EstadoPrenda === "donado"
-                  ? "#f377f9"
+                  ? "#f377f94d"
                   : "",
               border:
                 pressedRow === row.original.Id ? "2px solid #6582ff" : "none",
-              userSelect: "none",
+              // userSelect: "none",
             },
           })}
           enableStickyHeader={true}

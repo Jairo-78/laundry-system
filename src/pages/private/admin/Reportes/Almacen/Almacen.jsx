@@ -243,6 +243,8 @@ const Almacen = () => {
   };
 
   const openConfirmacion = async () => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: "Donacion",
       centered: true,
@@ -258,7 +260,12 @@ const Almacen = () => {
       labels: { confirm: "Si", cancel: "No" },
       confirmProps: { color: "green" },
       //onCancel: () => console.log("cancelado"),
-      onConfirm: () => handleDonar(),
+      onConfirm: () => {
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          handleDonar();
+        }
+      },
     });
   };
 
@@ -267,6 +274,8 @@ const Almacen = () => {
       const listItems = info.Items.filter(
         (item) => item.identificador !== iDelivery._id
       );
+
+      const estadoPago = handleGetInfoPago(info.ListPago, info.totalNeto);
 
       return {
         _id: info._id,
@@ -279,7 +288,7 @@ const Almacen = () => {
         totalNeto: info.totalNeto,
         Celular: info.celular,
         Direccion: info.direccion ? info.direccion : "- SIN INFORMACION -",
-        Pago: info.Pago,
+        Pago: estadoPago.estado,
         ListPago: info.ListPago,
         FechaPago: info.datePago,
         FechaIngreso: info.dateRecepcion,

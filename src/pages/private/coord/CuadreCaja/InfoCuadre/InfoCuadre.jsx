@@ -3,14 +3,14 @@
 import { TextInput } from "@mantine/core";
 import React from "react";
 import styled from "styled-components";
-import { ingresoDigital, simboloMoneda } from "../../../../../services/global";
-import { formatNumberMoneda } from "../../../../../utils/functions";
+import { ingresoDigital } from "../../../../../services/global";
+import { formatThousandsSeparator } from "../../../../../utils/functions";
 
 const InfoCuadreStyle = styled.div`
   display: grid;
   grid-template-rows: 305px auto;
   padding: 20px 10%;
-
+  gap: 30px;
   .form-ic {
     max-width: 300px;
     display: grid;
@@ -81,26 +81,28 @@ const InfoCuadre = ({
         <TextInput
           label="Caja Inicial"
           radius="md"
-          value={formatNumberMoneda(+cajaInicial)}
-          readOnly
-        />
-        <TextInput
-          label="Gastos"
-          radius="md"
-          value={formatNumberMoneda(+gastos)}
+          value={formatThousandsSeparator(cajaInicial)}
           readOnly
         />
         <TextInput
           label="Pedidos Pagados (EFECTIVO)"
           radius="md"
-          value={formatNumberMoneda(+pedidosPagadosEfectivo)}
+          value={formatThousandsSeparator(pedidosPagadosEfectivo)}
           readOnly
         />
+
+        <TextInput
+          label="Gastos"
+          radius="md"
+          value={formatThousandsSeparator(gastos)}
+          readOnly
+        />
+
         <TextInput
           label="En caja deberia haber :"
           radius="md"
           id="m-previsto"
-          value={formatNumberMoneda(+montoPrevisto)}
+          value={formatThousandsSeparator(montoPrevisto)}
           readOnly
         />
       </div>
@@ -110,7 +112,7 @@ const InfoCuadre = ({
             <div className="bloque title sb">SOBRA</div>
             <div className="bloque res">
               {Number(stateCuadre) > 0
-                ? `${formatNumberMoneda(+stateCuadre, true)}`
+                ? formatThousandsSeparator(stateCuadre, true)
                 : "NO"}
             </div>
           </div>
@@ -124,7 +126,7 @@ const InfoCuadre = ({
             <div className="bloque title fl">FALTA</div>
             <div className="bloque res">
               {Number(stateCuadre) < 0
-                ? `${formatNumberMoneda(+stateCuadre, true)}`
+                ? formatThousandsSeparator(stateCuadre, true)
                 : "NO"}
             </div>
           </div>
@@ -132,13 +134,13 @@ const InfoCuadre = ({
         <TextInput
           label={`Pedidos Pagados (${ingresoDigital}) :`}
           radius="md"
-          value={formatNumberMoneda(+pedidosPagadosTransferencia)}
+          value={formatThousandsSeparator(pedidosPagadosTransferencia)}
           readOnly
         />
         <TextInput
           label={`Pedidos Pagados (TARJETA) :`}
           radius="md"
-          value={formatNumberMoneda(+pedidosPagadosTarjeta)}
+          value={formatThousandsSeparator(pedidosPagadosTarjeta)}
           readOnly
         />
       </div>

@@ -2,9 +2,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
-
-import Prendas from "../../../../../utils/img/Prendas/index";
-import { GetDeliverysID } from "../../../../../redux/actions/aDelivery";
 import "./detalle.scss";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,15 +11,13 @@ import { simboloMoneda } from "../../../../../services/global";
 import {
   DateDetail_Hora,
   cLetter,
-  formatNumberMoneda,
+  formatThousandsSeparator,
   handleGetInfoPago,
 } from "../../../../../utils/functions";
 
 const Detalle = ({ infoD }) => {
   const [ordern, setOrder] = useState();
   const [statePago, setStatePago] = useState();
-  const dispatch = useDispatch();
-  const iDelivery = useSelector((state) => state.delivery.infoDeliveryID);
   const ListUsuarios = useSelector((state) => state.user.listUsuario);
 
   const calculateHeight = (
@@ -81,12 +76,6 @@ const Detalle = ({ infoD }) => {
   };
 
   useEffect(() => {
-    if (ordern?.Modalidad === "Delivery") {
-      dispatch(GetDeliverysID(ordern._id));
-    }
-  }, [ordern]);
-
-  useEffect(() => {
     setOrder(infoD);
     if (infoD) {
       const sPago = handleGetInfoPago(infoD.ListPago, infoD.totalNeto);
@@ -100,20 +89,6 @@ const Detalle = ({ infoD }) => {
         <h1>{ordern?.onWaiting.showText} en Espera</h1>
       </div>
       <h1 className="mod-ord">{ordern?.Modalidad}</h1>
-      {ordern?.Modalidad === "Delivery" && iDelivery ? (
-        <div className="list-delivery">
-          {iDelivery.map((e) => (
-            <div className="gasto-d" key={e._id}>
-              <div className="dsc_d">
-                <span>{handleDescDelivery(e.descripcion)}</span>
-              </div>
-              <div className="cant_d">
-                <span>{formatNumberMoneda(+e.monto, true)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
       <table className="product-t">
         <thead>
           <tr>
@@ -126,7 +101,7 @@ const Detalle = ({ infoD }) => {
         <tbody>
           {ordern?.DetalleOrden.map((p, index) => (
             <tr key={`${p._id}${index}`}>
-              <td>{p.cantidad}</td>
+              <td>{formatThousandsSeparator(p.cantidad)}</td>
               <td>{p.item}</td>
               <td className="tADescription">
                 <div className="contentDes">
@@ -196,7 +171,7 @@ const Detalle = ({ infoD }) => {
                   </div>
                 </div>
               </td>
-              <td>{formatNumberMoneda(+p.total, true)}</td>
+              <td>{formatThousandsSeparator(p.total)}</td>
             </tr>
           ))}
         </tbody>
@@ -217,7 +192,10 @@ const Detalle = ({ infoD }) => {
             </div>
             <div className="monto">
               <span>
-                {formatNumberMoneda(+ordern?.CargosExtras.igv.importe, true)}
+                {formatThousandsSeparator(
+                  ordern?.CargosExtras.igv.importe,
+                  true
+                )}
               </span>
             </div>
           </div>
@@ -228,13 +206,13 @@ const Detalle = ({ infoD }) => {
               <span>Descuento</span>
             </div>
             <div className="monto">
-              <span>{formatNumberMoneda(+ordern?.Descuento, true)}</span>
+              <span>{formatThousandsSeparator(ordern?.Descuento, true)}</span>
             </div>
           </div>
         ) : null}
       </div>
       <div className="more-a">
-        <h3>Total: {formatNumberMoneda(+ordern?.totalNeto, true)}</h3>
+        <h3>Total: {formatThousandsSeparator(ordern?.totalNeto)}</h3>
       </div>
       <div className="list-pagos">
         <div className="title">Lista de Pagos</div>
@@ -245,7 +223,7 @@ const Detalle = ({ infoD }) => {
                 {DateDetail_Hora(p.date.fecha, p.date.hora)}
               </span>
               <span className="_monto">
-                {formatNumberMoneda(+p.total, true)}
+                {formatThousandsSeparator(p.total, true)}
               </span>
               <span className="_metodopago">{cLetter(p.metodoPago)}</span>
               <span>{handleInfoUser(p.idUser)}</span>
@@ -268,7 +246,7 @@ const Detalle = ({ infoD }) => {
                 <div className="l-info">
                   <span>Subtotal :</span>
                 </div>
-                <div>{formatNumberMoneda(+statePago?.pago, true)}</div>
+                <div>{formatThousandsSeparator(statePago?.pago, true)}</div>
               </div>
               <div>
                 <div className="l-info">
@@ -281,7 +259,7 @@ const Detalle = ({ infoD }) => {
                   <div className="l-info">
                     <span>Falta :</span>
                   </div>
-                  <div>{formatNumberMoneda(+statePago?.falta, true)}</div>
+                  <div>{formatThousandsSeparator(statePago?.falta, true)}</div>
                 </div>
               ) : null}
             </span>

@@ -110,6 +110,7 @@ const Pendientes = () => {
       const listItems = d.Items.filter(
         (item) => item.identificador !== iDelivery._id
       );
+      const estadoPago = handleGetInfoPago(d.ListPago, d.totalNeto);
 
       return {
         _id: d._id,
@@ -122,7 +123,7 @@ const Pendientes = () => {
         totalNeto: d.totalNeto,
         Celular: d.celular,
         Direccion: d.direccion ? d.direccion : "- SIN INFORMACION -",
-        Pago: d.Pago,
+        Pago: estadoPago.estado,
         ListPago: d.ListPago,
         FechaPago: d.datePago,
         FechaIngreso: d.dateRecepcion,
@@ -302,8 +303,8 @@ const Pendientes = () => {
         "Pago",
         "Monto Facturado",
         "Items",
-        "Direccion",
         "Celular",
+        "Direccion",
         "En Espera",
         "Fecha de Ingreso",
       ])
@@ -403,6 +404,8 @@ const Pendientes = () => {
   };
 
   const openConfirmacion = async () => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: "Registro de Factura",
       centered: true,
@@ -418,7 +421,12 @@ const Pendientes = () => {
       labels: { confirm: "Si", cancel: "No" },
       confirmProps: { color: "green" },
       //onCancel: () => console.log("cancelado"),
-      onConfirm: () => handleChangeLocation_OrderService(),
+      onConfirm: () => {
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          handleChangeLocation_OrderService();
+        }
+      },
     });
   };
 

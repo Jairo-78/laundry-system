@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { ingresoDigital } from "../../../services/global";
 import { Button, NumberInput } from "@mantine/core";
 import { useFormik } from "formik";
-import { formatNumberMoneda } from "../../../utils/functions";
+import { formatThousandsSeparator } from "../../../utils/functions";
 
 const MetodoPago = ({
   handlePago,
@@ -144,19 +144,13 @@ const MetodoPago = ({
           <NumberInput
             name="total"
             className="montoToPay"
-            label={`Monto de Pago : Max(${formatNumberMoneda(
-              +totalToPay,
-              true
+            label={`Monto de Pago : Max(${formatThousandsSeparator(
+              totalToPay
             )})`}
             placeholder="Ingrese Monto"
             precision={2}
             value={formMetodoPago.values.total}
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            formatter={(value) =>
-              !Number.isNaN(parseFloat(value))
-                ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-                : ""
-            }
+            formatter={(value) => formatThousandsSeparator(value)}
             onChange={(value) => formMetodoPago.setFieldValue("total", value)}
             min={0}
             step={1}

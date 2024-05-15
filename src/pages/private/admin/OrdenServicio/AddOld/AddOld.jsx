@@ -1,4 +1,5 @@
-﻿﻿/* eslint-disable react-hooks/exhaustive-deps */
+﻿/* eslint-disable no-unexpected-multiline */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Autocomplete, NumberInput, TextInput } from "@mantine/core";
@@ -42,7 +43,8 @@ import {
 } from "../../../../../services/global";
 import {
   DateCurrent,
-  formatNumberMoneda,
+  formatRoundedNumber,
+  formatThousandsSeparator,
   handleGetInfoPago,
 } from "../../../../../utils/functions";
 import ButtonSwitch from "../../../../../components/PRIVATE/MetodoPago/ButtonSwitch/ButtonSwitch";
@@ -54,15 +56,14 @@ const AddOld = () => {
   const { InfoImpuesto, InfoPuntos } = useSelector(
     (state) => state.modificadores
   );
-  const codFinal = useSelector((state) => state.codigo.infoCodigo.codFinal);
 
   const [isPortal, setIsPortal] = useState(false);
 
   // Lista de clientes
   const [infoClientes, setInfoClientes] = useState([]);
-  // // Puntos del cliente Actual
+  // Puntos del cliente Actual
   const [dataScore, setDataScore] = useState(false);
-  // // valor por puntos
+  // valor por puntos
   const [vScore, setVScore] = useState(null);
   // Impuesto
   const [impuesto, setImpuesto] = useState(null);
@@ -152,7 +153,8 @@ const AddOld = () => {
     },
   });
 
-  const openModal = (data) =>
+  const openModal = (data) => {
+    let confirmationEnabled = true;
     modals.openConfirmModal({
       title: "Registro de Orden de Servicio",
       centered: true,
@@ -163,9 +165,15 @@ const AddOld = () => {
       ),
       labels: { confirm: "Si", cancel: "No" },
       confirmProps: { color: "green" },
-      //onCancel: () => console.log("Cancelado"),
-      onConfirm: () => handleGetInfo(data),
+      onCancel: () => console.log("Cancelado"),
+      onConfirm: () => {
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          handleGetInfo(data);
+        }
+      },
     });
+  };
 
   const addRowGarment = (idServicio) => {
     const IService = InfoServicios.find(
@@ -281,27 +289,25 @@ const AddOld = () => {
           fecha: tFecha(formik.values.dateRecojo),
           hora: DateCurrent().format3,
         },
-        idCuadre: "",
+        isCounted: false,
         idUser: InfoUsuario._id,
       };
     });
-
+    2;
     const infoOrden = {
       codRecibo: info.codigo,
       dateRecepcion: {
         fecha: tFecha(info.dateRecojo),
-        hora: tHora(infoNegocio.horario.horas.inicio, 1, "despues"),
+        hora: tHora(infoNegocio.funcionamiento?.horas?.inicio, 1, "despues"),
       },
       Modalidad: info.swModalidad,
       Nombre: info.name,
       Items: infoIntem,
       celular: info.phone,
       direccion: info.direccion,
-      Pago: info.pago,
-      ListPago: lPago,
       datePrevista: {
         fecha: tFecha(info.datePrevista),
-        hora: tHora(infoNegocio.horario.horas.fin, 1, "antes"),
+        hora: tHora(infoNegocio.funcionamiento?.horas?.fin, 1, "antes"),
       },
       dateEntrega: {
         fecha: "",
@@ -330,6 +336,7 @@ const AddOld = () => {
     dispatch(
       AddOrdenServices({
         infoOrden,
+        infoPago: lPago,
         rol: InfoUsuario.rol,
       })
     ).then((res) => {
@@ -403,10 +410,7 @@ const AddOld = () => {
     const descuento = formik.values.cargosExtras.descuentos.puntos;
     formik.setFieldValue("descuento", descuento);
     const totalNeto = total - descuento;
-    formik.setFieldValue(
-      "totalNeto",
-      (Math.floor(totalNeto * 10) / 10).toFixed(1)
-    );
+    formik.setFieldValue("totalNeto", +formatRoundedNumber(totalNeto));
   }, [
     formik.values.cargosExtras.igv,
     formik.values.items,
@@ -464,6 +468,7 @@ const AddOld = () => {
                     name="codigo"
                     label="Codigo :"
                     placeholder="N° Talonario"
+                    formatter={(value) => formatThousandsSeparator(value)}
                     value={formik.values.codigo}
                     precision={0}
                     onChange={(e) => {
@@ -471,7 +476,6 @@ const AddOld = () => {
                     }}
                     min={1}
                     step={1}
-                    max={999999}
                     hideControls
                     autoComplete="off"
                   />
@@ -520,8 +524,8 @@ const AddOld = () => {
                       formik.setFieldValue("datePrevista", date);
                     }}
                     placeholder="Ingrese Fecha"
-                    // maxDate={moment().subtract(1, "day").toDate()}
                     maxDate={moment().toDate()}
+                    // maxDate={moment().subtract(1, "day").toDate()}
                     //onNextYear
                   />
                   {formik.errors.dateRecojo &&
@@ -686,44 +690,51 @@ const AddOld = () => {
                   {formik.values.items.map((row, index) => (
                     <tr key={index}>
                       <td>
-                        <input
-                          type="text"
-                          className="txtCantidad"
+                        <NumberInput
                           name={`items.${index}.cantidad`}
-                          autoComplete="off"
+                          className="txtCantidad"
                           disabled={row.disable.cantidad}
-                          onChange={(e) => {
-                            const inputValue = e.target.value;
-                            const validInput = inputValue
-                              ? inputValue.replace(/[^0-9.]/g, "")
-                              : "";
+                          value={formik.values.items[index].cantidad || ""}
+                          formatter={(value) => formatThousandsSeparator(value)}
+                          onChange={(value) => {
+                            // Convierte la cadena a un número de punto flotante
+                            let newQuantity = parseFloat(value);
 
-                            // Garantizar que no haya más de un punto decimal
-                            const validQuantity = validInput.replace(
-                              /\.(?=.*\.)/g,
-                              ""
-                            );
-
-                            const newQuantity =
-                              validInput !== "" ? validQuantity : "";
+                            // Si newQuantity es NaN o es un número muy pequeño, establece 0
+                            if (
+                              isNaN(newQuantity) ||
+                              Math.abs(newQuantity) < 0.01
+                            ) {
+                              newQuantity = 0;
+                            }
 
                             const price =
-                              parseFloat(formik.values.items[index].price) || 0;
-                            const newTotal =
-                              newQuantity !== "" ? newQuantity * price : "";
+                              parseFloat(formik.values.items[index].price) || 0; // Precio del artículo
 
+                            let newTotal = ""; // Inicializa la nueva cantidad total
+
+                            // Calcula el total solo si newQuantity es un número válido
+                            if (!isNaN(newQuantity)) {
+                              newTotal = (newQuantity * price).toFixed(2); // Calcula el total y lo redondea a 2 decimales
+                            }
+
+                            // Actualiza los valores de cantidad y total en el formulario
                             formik.setFieldValue(
                               `items.${index}.cantidad`,
-                              newQuantity
+                              newQuantity // Asigna la nueva cantidad
                             );
                             formik.setFieldValue(
                               `items.${index}.total`,
-                              newTotal !== "" ? +newTotal.toFixed(1) : ""
+                              +newTotal // Asigna el total calculado al campo total
                             );
                           }}
+                          precision={2}
+                          min={0.01}
+                          step={1}
+                          hideControls
+                          autoComplete="off"
                           autoFocus={true}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.items[index].cantidad || ""}
+                          required
                         />
                       </td>
                       <td>
@@ -844,23 +855,20 @@ const AddOld = () => {
                         <NumberInput
                           name={`items.${index}.total`}
                           className="txtTotal"
+                          disabled={row.disable.total}
                           value={formik.values.items[index].total}
-                          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          formatter={(value) =>
-                            !Number.isNaN(parseFloat(value))
-                              ? `${value}`.replace(
-                                  /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                                  ","
-                                )
-                              : ""
-                          }
+                          formatter={(value) => formatThousandsSeparator(value)}
                           onChange={(value) => {
                             formik.setFieldValue(`items.${index}.total`, value);
                           }}
-                          min={0}
+                          precision={2}
+                          min={0.01}
                           step={1}
                           hideControls
                           autoComplete="off"
+                          autoFocus={true}
+                          onBlur={formik.handleBlur}
+                          required
                         />
                       </td>
                       <Tag
@@ -888,7 +896,9 @@ const AddOld = () => {
                   <tr style={{ marginTop: "10px" }}>
                     <td></td>
                     <td>Subtotal :</td>
-                    <td>{formatNumberMoneda(formik.values.subTotal, true)}</td>
+                    <td>
+                      {formatThousandsSeparator(formik.values.subTotal, true)}
+                    </td>
                     <td></td>
                   </tr>
                   <tr>
@@ -899,7 +909,7 @@ const AddOld = () => {
                           {nameImpuesto} ({(impuesto * 100).toFixed(0)} %) :
                         </td>
                         <td>
-                          {formatNumberMoneda(
+                          {formatThousandsSeparator(
                             formik.values.cargosExtras.igv.importe,
                             true
                           )}
@@ -921,7 +931,7 @@ const AddOld = () => {
                     <td></td>
                     <td>Total :</td>
                     <td>
-                      {formatNumberMoneda(+formik.values.totalNeto, true)}
+                      {formatThousandsSeparator(formik.values.totalNeto, true)}
                     </td>
                     <td></td>
                   </tr>
@@ -966,11 +976,7 @@ const AddOld = () => {
                   ) : null}
                 </div>
                 {iPago ? (
-                  <div className="info-pago">{`${
-                    iPago.metodoPago
-                  } ${formatNumberMoneda(+iPago.total, true)} : ${
-                    formik.values.pago
-                  }`}</div>
+                  <div className="info-pago">{`${iPago.metodoPago} ${simboloMoneda}${iPago.total} : ${formik.values.pago}`}</div>
                 ) : null}
               </div>
             </div>

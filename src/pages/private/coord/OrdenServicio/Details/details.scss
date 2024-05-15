@@ -118,7 +118,7 @@
       tr {
         position: relative;
         display: grid;
-        grid-template-columns: 80px 130px 200px 120px;
+        grid-template-columns: 80px 130px 200px 80px;
       }
       thead {
         tr {
@@ -243,13 +243,6 @@
       justify-content: space-around;
       align-items: center;
     }
-    .list-delivery {
-      border: solid 1px silver;
-      width: max-content;
-      padding: 10px 20px;
-      margin: auto;
-      text-align: center;
-    }
     h2 {
       text-align: center;
       margin-bottom: 0;
@@ -317,7 +310,7 @@
         min-width: 500px;
         li {
           display: grid;
-          grid-template-columns: 25px max-content 120px 80px 110px 30px;
+          grid-template-columns: 25px max-content 70px 80px 110px 30px;
           padding: 10px;
           place-items: center;
         }

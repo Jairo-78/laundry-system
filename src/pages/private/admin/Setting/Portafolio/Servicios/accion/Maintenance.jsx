@@ -22,6 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import ValidIco from "../../../../../../../components/ValidIco/ValidIco";
 import { Notify } from "../../../../../../../utils/notify/Notify";
+import { formatThousandsSeparator } from "../../../../../../../utils/functions";
 
 const Maintenance = ({ info, onClose }) => {
   const isEdit = info != null;
@@ -60,6 +61,7 @@ const Maintenance = ({ info, onClose }) => {
   });
 
   const handleNewServicio = (data) => {
+    let confirmationEnabled = true;
     modals.openConfirmModal({
       title: "Registro de nuevo Servicio",
       centered: true,
@@ -70,15 +72,20 @@ const Maintenance = ({ info, onClose }) => {
       confirmProps: { color: "green" },
 
       onConfirm: () => {
-        dispatch(addServicio(data));
-        Notify("Registro Agregado Correctamente", "", "success");
-        formik.resetForm();
-        onClose();
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          dispatch(addServicio(data));
+          Notify("Registro Agregado Correctamente", "", "success");
+          formik.resetForm();
+          onClose();
+        }
       },
     });
   };
 
   const handleUpdateServicio = (data) => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: "Actualizacion de Servicio",
       centered: true,
@@ -89,12 +96,15 @@ const Maintenance = ({ info, onClose }) => {
       confirmProps: { color: "green" },
 
       onConfirm: () => {
-        dispatch(
-          updateServicio({ idServicio: info._id, servicioActualizado: data })
-        );
-        Notify("Actualizacion Exitosa", "", "success");
-        formik.resetForm();
-        onClose();
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          dispatch(
+            updateServicio({ idServicio: info._id, servicioActualizado: data })
+          );
+          Notify("Actualizacion Exitosa", "", "success");
+          formik.resetForm();
+          onClose();
+        }
       },
     });
   };
@@ -138,13 +148,8 @@ const Maintenance = ({ info, onClose }) => {
                 name="precioVenta"
                 size="xs"
                 label="Precio :"
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                formatter={(value) =>
-                  !Number.isNaN(parseFloat(value))
-                    ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-                    : ""
-                }
                 value={formik.values.precioVenta}
+                formatter={(value) => formatThousandsSeparator(value)}
                 onChange={(e) => {
                   formik.setFieldValue("precioVenta", e);
                 }}

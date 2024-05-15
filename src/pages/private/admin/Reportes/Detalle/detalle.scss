@@ -4,23 +4,6 @@
   gap: 10px;
   .mod-ord {
   }
-  .list-delivery {
-    .gasto-d {
-      display: grid;
-      grid-template-columns: max-content max-content;
-      border: #1dbe73 1px solid;
-      border-radius: 15px;
-      overflow: hidden;
-      .dsc_d {
-        padding: 5px 10px;
-        background: #1dbe73;
-        color: #fff;
-      }
-      .cant_d {
-        padding: 5px 10px;
-      }
-    }
-  }
   .inWaiting {
     background: #f88888;
     margin: auto;
@@ -247,7 +230,7 @@
       min-width: 500px;
       li {
         display: grid;
-        grid-template-columns: 25px max-content 100px 80px 110px 30px;
+        grid-template-columns: 25px max-content 70px 80px 110px 30px;
         padding: 10px;
         place-items: center;
       }
@@ -282,7 +265,7 @@
             font-weight: 600;
             width: 80px;
             position: absolute;
-            right: 90px;
+            right: 130px;
             text-align: left;
           }
         }

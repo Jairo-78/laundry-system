@@ -101,18 +101,18 @@ const Setting = () => {
             </p>
           </div>
         </Link>
-        {/* <Link
-          to={`/${PrivateRoutes.PRIVATE}/${PrivateRoutes.SETTING_GASTOS}`}
+        <Link
+          to={`/${PrivateRoutes.PRIVATE}/${PrivateRoutes.SETTING_TIPO_GASTOS}`}
           className="tag-setting"
         >
           <div className="img">
             <img src={GastosSetting} alt="" />
           </div>
           <div>
-            <h1>Gastos</h1>
+            <h1>Tipos de Gastos</h1>
             <p>Realiza Registros, Actualizaciones de gastos recurrentes </p>
           </div>
-        </Link> */}
+        </Link>
         <Link
           to={`/${PrivateRoutes.PRIVATE}/${PrivateRoutes.SETTING_POINT}`}
           className="tag-setting"

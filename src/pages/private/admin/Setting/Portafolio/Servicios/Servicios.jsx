@@ -7,17 +7,14 @@ import { Box, Button, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
 import "./servicios.scss";
-import {
-  confMoneda,
-  simboloMoneda,
-  tipoMoneda,
-} from "../../../../../../services/global";
+import { simboloMoneda } from "../../../../../../services/global";
 import Portal from "../../../../../../components/PRIVATE/Portal/Portal";
 import Maintenance from "./accion/Maintenance";
 import { getInfoCategoria } from "../utilsPortafolio";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteServicio } from "../../../../../../redux/actions/aServicios";
 import { Notify } from "../../../../../../utils/notify/Notify";
+import { formatThousandsSeparator } from "../../../../../../utils/functions";
 
 const Servicios = () => {
   const [infoServicios, setInfoServicios] = useState([]);
@@ -69,14 +66,7 @@ const Servicios = () => {
           placeholder: "",
         },
         Cell: ({ cell }) => (
-          <Box>
-            {cell.getValue()?.toLocaleString?.(confMoneda, {
-              style: "currency",
-              currency: tipoMoneda,
-              minimumIntegerDigits: 1, // Al menos 1 dígito antes del separador de miles
-              minimumFractionDigits: 0, // Mínimo 2 dígitos después del separador decimal
-            })}
-          </Box>
+          <Box>{formatThousandsSeparator(cell.getValue(), true)}</Box>
         ),
       },
       {
@@ -98,6 +88,8 @@ const Servicios = () => {
   };
 
   const handleDeleteService = (id) => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: "Eliminacion de Servicio",
       centered: true,
@@ -108,9 +100,12 @@ const Servicios = () => {
       confirmProps: { color: "red" },
 
       onConfirm: () => {
-        dispatch(deleteServicio(id));
-        Notify("Eliminacion Exitosa", "", "success");
-        handleCloseAction();
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          dispatch(deleteServicio(id));
+          Notify("Eliminacion Exitosa", "", "success");
+          handleCloseAction();
+        }
       },
     });
   };
@@ -185,7 +180,7 @@ const Servicios = () => {
                     setAction("Edit");
                   }}
                 >
-                  Actualizar Servicio
+                  Actualizar
                 </Button>
 
                 {rowPick.categoria.nivel === "secundario" ? (
@@ -194,7 +189,7 @@ const Servicios = () => {
                     style={{ background: "#e76565" }}
                     onClick={() => handleDeleteService(rowPick._id)}
                   >
-                    Eliminar Servicio
+                    Eliminar
                   </Button>
                 ) : null}
               </div>

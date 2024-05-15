@@ -11,10 +11,11 @@ export const nameMoneda = "Pesos";
 export const ingresoDigital = "TRANSFERENCIA MOVIL";
 
 export const politicaAbandono = {
-  mResaltado: "El plazo maximo para retirar las prendas es de 30 dias ",
-  mGeneral: `despues de entregada a la lavanderia; vencido el plazo se donara a instituciones de caridad.No hay lugar a
-   reclamo una ves retirada la prenda No nos reposabilizamos por prendas que se destiñan por malos tintes, botones o adornos 
-   que no resistan al lavado o planchado, por las prendas que se deterioren por estar demasiado usadas, tejidos y confecciones defectuosas.`,
+  mResaltado: "El plazo máximo para retirar las prendas es de 30 días ",
+  mGeneral: `después de entregada a la lavandería; vencido el plazo, se donará a instituciones de caridad. 
+  No hay lugar al reclamo una vez retirada la prenda. No nos responsabilizamos por prendas que se destiñan, 
+  por malos tintes, botones o adornos que no resistan al lavado o planchado, por las prendas que se deterioren 
+  por estar demasiado usadas, tejidos y confecciones defectuosas.`,
 };
 
 export const documento = "Cédula"; // DNI
@@ -34,4 +35,3 @@ export const MONTOS_BASE = [
   { monto: 500, cantidad: "", total: 0 },
   { monto: 200, cantidad: "", total: 0 },
   { monto: 100, cantidad: "", total: 0 },
-];

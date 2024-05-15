@@ -71,7 +71,9 @@ const Usuarios = () => {
     },
   });
 
-  const valiProcess = (data) =>
+  const valiProcess = (data) => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: `${onEdit ? "Actualizacion de Usuario" : "Registro de Usuario"}`,
       centered: true,
@@ -86,36 +88,42 @@ const Usuarios = () => {
       confirmProps: { color: "green" },
       onCancel: () => console.log("Cancelado"),
       onConfirm: () => {
-        if (onEdit === true) {
-          setOnLoading(true);
-          dispatch(EditUser(data)).then((response) => {
-            if (response.payload) {
-              setOnEdit(false);
-              setInitialValues(baseState);
-              formik.resetForm();
-              setOnLoading(false);
-            }
-            if ("error" in response) {
-              setOnLoading(false);
-            }
-          });
-        } else {
-          setOnLoading(true);
-          dispatch(RegisterUser(data)).then((response) => {
-            if (response.payload) {
-              setInitialValues(baseState);
-              formik.resetForm();
-              setOnLoading(false);
-            }
-            if ("error" in response) {
-              setOnLoading(false);
-            }
-          });
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          if (onEdit === true) {
+            setOnLoading(true);
+            dispatch(EditUser(data)).then((response) => {
+              if (response.payload) {
+                setOnEdit(false);
+                setInitialValues(baseState);
+                formik.resetForm();
+                setOnLoading(false);
+              }
+              if ("error" in response) {
+                setOnLoading(false);
+              }
+            });
+          } else {
+            setOnLoading(true);
+            dispatch(RegisterUser(data)).then((response) => {
+              if (response.payload) {
+                setInitialValues(baseState);
+                formik.resetForm();
+                setOnLoading(false);
+              }
+              if ("error" in response) {
+                setOnLoading(false);
+              }
+            });
+          }
         }
       },
     });
+  };
 
-  const validDeleteUsuario = (id) =>
+  const validDeleteUsuario = (id) => {
+    let confirmationEnabled = true;
+
     modals.openConfirmModal({
       title: "Eliminar Usuario",
       centered: true,
@@ -125,8 +133,14 @@ const Usuarios = () => {
       labels: { confirm: "Si", cancel: "No" },
       confirmProps: { color: "red" },
       onCancel: () => console.log("Cancelado"),
-      onConfirm: () => dispatch(DeleteUser(id)),
+      onConfirm: () => {
+        if (confirmationEnabled) {
+          confirmationEnabled = false;
+          dispatch(DeleteUser(id));
+        }
+      },
     });
+  };
 
   const validIco = (mensaje) => {
     return (
@@ -141,13 +155,13 @@ const Usuarios = () => {
   };
 
   const validEnabledAccion = (user) => {
-    return InfoUsuario.rol === Roles.ADMIN
+    return InfoUsuario.rol === "admin"
       ? false
-      : InfoUsuario.rol === Roles.GERENTE && user.rol === Roles.GERENTE
+      : InfoUsuario.rol === "gerente" && user.rol === "gerente"
       ? user._id === InfoUsuario._id
         ? false
         : true
-      : InfoUsuario.rol === Roles.GERENTE && user.rol !== Roles.ADMIN
+      : InfoUsuario.rol === "gerente" && user.rol !== "admin"
       ? false
       : true;
   };
@@ -291,16 +305,15 @@ const Usuarios = () => {
                   }
                   data={[
                     {
-                      value: Roles.ADMIN,
+                      value: "admin",
                       label: "Administrador",
                       disabled: true,
                     },
                     {
-                      value: Roles.GERENTE,
+                      value: "gerente",
                       label: "Gerente",
                       disabled: InfoUsuario.rol === Roles.ADMIN ? false : true,
                     },
-
                     {
                       value: "coord",
                       label: "Coordinador",

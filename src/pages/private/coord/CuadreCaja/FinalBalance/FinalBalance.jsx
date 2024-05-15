@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { TextInput } from "@mantine/core";
+import { NumberInput, TextInput } from "@mantine/core";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Nota from "../Nota/Nota";
+import { simboloMoneda } from "../../../../../services/global";
 import {
-  DateCurrent,
-  formatNumberMoneda,
+  formatRoundedNumber,
+  formatThousandsSeparator,
 } from "../../../../../utils/functions";
 
 const FinalBalanceStyle = styled.div`
@@ -95,7 +96,6 @@ const FinalBalance = ({
   handleChangeCorte,
   handleChangeNotas,
   cajaFinal,
-  datePrincipal,
 }) => {
   return (
     <FinalBalanceStyle>
@@ -104,37 +104,44 @@ const FinalBalance = ({
         <TextInput
           label="Monto en Caja"
           radius="md"
-          value={formatNumberMoneda(+totalCaja)}
+          value={formatThousandsSeparator(totalCaja)}
           readOnly
         />
-        <TextInput
+        <NumberInput
           label="Corte"
           radius="md"
           disabled={sDisabledCuadre}
-          value={formatNumberMoneda(+infoState?.corte)}
-          onChange={(e) => {
-            const inputValue = e.target.value;
-            console.log(inputValue);
-            const numericValue = inputValue.replace(/[^0-9]/g, ""); // Filtrar caracteres no numéricos, permitiendo el punto decimal
-
-            handleChangeCorte(numericValue);
+          value={+infoState?.corte}
+          formatter={(value) => formatThousandsSeparator(value)}
+          precision={2}
+          step={0.05}
+          min={0}
+          hideControls={true}
+          autoComplete="off"
+          onChange={(value) => {
+            const newValue = formatRoundedNumber(value);
+            handleChangeCorte(newValue);
           }}
         />
         <TextInput
           label="Caja Final"
           radius="md"
-          value={formatNumberMoneda(+cajaFinal)}
+          value={formatThousandsSeparator(cajaFinal)}
           readOnly
         />
       </div>
-      <h1>Se hace Entrega de {formatNumberMoneda(+infoState?.corte, true)}</h1>
+      <h1>
+        Se hace Entrega de {formatThousandsSeparator(infoState?.corte, true)}
+      </h1>
       {!sDisabledCuadre ? (
         <div className="action-end">
           <button
             type="button"
             onClick={async () => {
               await handleSavedActivated(true);
-              openModal(true);
+              setTimeout(() => {
+                openModal(true);
+              }, 1000);
             }}
           >
             Guardar y Generar PDF
@@ -146,7 +153,9 @@ const FinalBalance = ({
             type="button"
             onClick={async () => {
               await handleSavedActivated(true);
-              openModal(false);
+              setTimeout(() => {
+                openModal(false);
+              }, 1000);
             }}
           >
             Generar PDF
