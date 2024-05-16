@@ -186,6 +186,9 @@ const Ticket = React.forwardRef((props, ref) => {
             <div className="receipt_header">
               <div className="name-bussiness">
                 <Logo className="img-logo" />
+                <div className="data-text">
+                  <span>¡ EL IMPERIO DE LA LIMPIEZA !</span>
+                </div>
               </div>
               {sizePaper80 === false ? (
                 <>
