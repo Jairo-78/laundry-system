@@ -7,6 +7,7 @@ import { ReactComponent as Moto } from "../../../../../../../utils/img/Delivery/
 import { ReactComponent as Taxi } from "../../../../../../../utils/img/Delivery/taxi-lateral.svg";
 import { ReactComponent as Tienda } from "../../../../../../../utils/img/Delivery/tienda.svg";
 import { simboloMoneda } from "../../../../../../../services/global";
+import { formatThousandsSeparator } from "../../../../../../../utils/functions";
 
 const Entregar = ({ setFieldValue, errors, touched, values }) => {
   const inputRef = useRef(null);
@@ -102,12 +103,7 @@ const Entregar = ({ setFieldValue, errors, touched, values }) => {
           value={values.mDevolucion}
           ref={inputRef}
           disabled={values.tipoTrasporte === "Tienda" ? true : false}
-          formatter={(value) =>
-            `${simboloMoneda} ${value}`.replace(
-              /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-              ","
-            )
-          }
+          formatter={(value) => formatThousandsSeparator(value)}
           placeholder="Ingrese Monto"
           precision={2}
           step={0.05}
