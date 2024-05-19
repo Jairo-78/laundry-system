@@ -320,15 +320,15 @@ const PrivateMasterLayout = (props) => {
       }
     });
     // LOGIN
-    socket.on("server:onLogin", (data) => {
-      if (InfoUsuario._id === data) {
-        _handleShowModal(
-          "Comunicado",
-          "Se registro otro inicio de sesion con esta cuenta",
-          "double-login"
-        );
-      }
-    });
+    // socket.on("server:onLogin", (data) => {
+    //   if (InfoUsuario._id === data) {
+    //     _handleShowModal(
+    //       "Comunicado",
+    //       "Se registro otro inicio de sesion con esta cuenta",
+    //       "double-login"
+    //     );
+    //   }
+    // });
     // 1er LOGIN
     socket.on("server:onFirtLogin", (data) => {
       dispatch(LS_FirtsLogin(data));
@@ -370,7 +370,7 @@ const PrivateMasterLayout = (props) => {
       socket.off("server:cImpuesto");
       socket.off("server:cPromotions");
       socket.off("server:cNegocio");
-      socket.off("server:onLogin");
+      // socket.off("server:onLogin");
       socket.off("server:onFirtLogin");
       socket.off("server:onDeleteAccount");
       socket.off("server:onChangeUser");

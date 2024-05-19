@@ -133,7 +133,7 @@ const Login = () => {
       );
 
       if (res.status === 200) {
-        socket.emit("client:onLogin", res.data.id);
+        // socket.emit("client:onLogin", res.data.id);
         if (res.data.type === "token") {
           const token = res.data.info;
           handleGetInfoUser(token);
