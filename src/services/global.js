@@ -1,7 +1,5 @@
 // Zona Horaria
 export const timeZone = "America/Bogota";
-// Mostrar Opcion de Registrar Ordenes Antiguas
-export const oldOrder = true;
 // Tipo de Moneda
 export const tipoMoneda = "COP";
 // Formato de la moneda (separacion de miles - decimales) segun la configuracion regional
