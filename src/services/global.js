@@ -1,5 +1,7 @@
 // Zona Horaria
 export const timeZone = "America/Bogota";
+// Factura
+export const showFactura = false;
 // Tipo de Moneda
 export const tipoMoneda = "COP";
 // Formato de la moneda (separacion de miles - decimales) segun la configuracion regional
