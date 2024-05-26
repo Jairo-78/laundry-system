@@ -253,7 +253,7 @@ const Ticket = React.forwardRef((props, ref) => {
             <div className="info-client">
               <div className="cod-rec">
                 <p className="l-text">
-                  <span className="title-o">NUMERO DE FACTURA</span>
+                  <span className="title-o">FACTURA</span>
                   <span className="number-o">
                     N° {String(infoOrden.codRecibo).padStart(4, "0")}
                   </span>
