@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Box, MultiSelect, Text, Tooltip } from "@mantine/core";
+import { Box, MultiSelect, Text, Textarea, Tooltip } from "@mantine/core";
 import { MonthPickerInput } from "@mantine/dates";
 import { MantineReactTable } from "mantine-react-table";
 
@@ -151,6 +151,27 @@ const List = () => {
         size: 250,
       },
       {
+        accessorKey: "Direccion",
+        header: "Direccion",
+        enableColumnFilter: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Direccion",
+        },
+        Cell: ({ cell }) =>
+          cell.getValue() ? (
+            <Textarea
+              autosize
+              minRows={1}
+              maxRows={3}
+              readOnly
+              value={cell.getValue()}
+            />
+          ) : (
+            ""
+          ),
+        size: 200,
+      },
+      {
         accessorKey: "PParcial",
         header: "Monto Cobrado",
         //enableSorting: false,
@@ -223,27 +244,6 @@ const List = () => {
         enableEditing: false,
         size: 100,
       },
-      // {
-      //   accessorKey: "Direccion",
-      //   header: "Direccion",
-      //   enableColumnFilter: false,
-      //   mantineFilterTextInputProps: {
-      //     placeholder: "Direccion",
-      //   },
-      //   Cell: ({ cell }) =>
-      //     cell.getValue() ? (
-      //       <Textarea
-      //         autosize
-      //         minRows={1}
-      //         maxRows={3}
-      //         readOnly
-      //         value={cell.getValue()}
-      //       />
-      //     ) : (
-      //       ""
-      //     ),
-      //   size: 200,
-      // },
       {
         accessorKey: "Location",
         header: "Ubicacion",

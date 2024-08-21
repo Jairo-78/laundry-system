@@ -122,8 +122,8 @@ const Delivery = () => {
         hora: "",
       },
       descuento: {
-        estado: true,
-        modoDescuento: "Manual", // Puntos | Promocion | Manual | Ninguno
+        estado: false,
+        modoDescuento: "Ninguno", // Puntos | Promocion | Manual | Ninguno
         info: null,
         monto: 0,
       },
@@ -258,8 +258,8 @@ const Delivery = () => {
         },
       ],
       descuento: {
-        estado: true,
-        modoDescuento: "Manual", // Puntos | Promocion | Manual | Ninguno
+        estado: false,
+        modoDescuento: "Ninguno", // Puntos | Promocion | Manual | Ninguno
         info: null,
         monto: 0,
       },

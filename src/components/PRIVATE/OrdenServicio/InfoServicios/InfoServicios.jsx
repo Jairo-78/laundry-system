@@ -457,6 +457,14 @@ const InfoServicios = ({
                           // readOnly
                           value={+values.Items[index].monto}
                           formatter={(value) => formatThousandsSeparator(value)}
+                          onFocus={() => {
+                            const inputElement = document.querySelector(
+                              `[name='Items.${index}.monto']`
+                            );
+                            if (inputElement) {
+                              inputElement.select();
+                            }
+                          }}
                           onChange={(value) => {
                             changeValue(`Items.${index}.monto`, value);
                             const descuento =
@@ -476,6 +484,24 @@ const InfoServicios = ({
                           step={1}
                           hideControls
                           autoComplete="off"
+                          onBlur={(e) => {
+                            const price = values.Items[index].price;
+                            const cantidad = values.Items[index].cantidad;
+                            const montoCalculado = cantidad * price;
+                            const inputValue = parseFloat(e.target.value);
+
+                            // Verifica si el valor es NaN, un texto no numérico, o menor que el monto actual
+                            if (
+                              isNaN(inputValue) ||
+                              inputValue < montoCalculado ||
+                              inputValue < +values.Items[index].monto
+                            ) {
+                              changeValue(
+                                `Items.${index}.monto`,
+                                montoCalculado
+                              );
+                            }
+                          }}
                           required
                         />
                       </td>
@@ -535,6 +561,14 @@ const InfoServicios = ({
                         // readOnly
                         value={+values.Items[index].monto}
                         formatter={(value) => formatThousandsSeparator(value)}
+                        onFocus={() => {
+                          const inputElement = document.querySelector(
+                            `[name='Items.${index}.monto']`
+                          );
+                          if (inputElement) {
+                            inputElement.select();
+                          }
+                        }}
                         onChange={(value) => {
                           changeValue(`Items.${index}.monto`, value);
                           const descuento = values.Items[index].descuentoManual;
@@ -553,6 +587,21 @@ const InfoServicios = ({
                         step={1}
                         hideControls
                         autoComplete="off"
+                        onBlur={(e) => {
+                          const price = values.Items[index].price;
+                          const cantidad = values.Items[index].cantidad;
+                          const montoCalculado = cantidad * price;
+                          const inputValue = parseFloat(e.target.value);
+
+                          // Verifica si el valor es NaN, un texto no numérico, o menor que el monto actual
+                          if (
+                            isNaN(inputValue) ||
+                            inputValue < montoCalculado ||
+                            inputValue < +values.Items[index].monto
+                          ) {
+                            changeValue(`Items.${index}.monto`, montoCalculado);
+                          }
+                        }}
                         required
                       />
                     </td>

@@ -19,7 +19,6 @@ import {
   nameImpuesto,
   politicaAbandono,
   showPuntosOnTicket,
-  simboloMoneda,
 } from "../../../../../../../services/global";
 import { useSelector } from "react-redux";
 import { Notify } from "../../../../../../../utils/notify/Notify";
@@ -425,24 +424,28 @@ const Ticket = React.forwardRef((props, ref) => {
                           </td>
                         </tr>
                       ) : null}
-                      <tr>
-                        <td>Descuento :</td>
-                        <td>
-                          {infoOrden?.descuento.estado &&
-                          infoOrden?.descuento.info &&
-                          infoOrden?.descuento.modoDescuento === "Manual"
-                            ? formatThousandsSeparator(
-                                infoOrden?.descuento.info.reduce(
-                                  (total, item) =>
-                                    total + parseFloat(item.descuentoMonto),
-                                  0
+                      {infoOrden?.descuento.monto > 0 ||
+                      (infoOrden?.descuento.modoDescuento === "Manual" &&
+                        infoOrden?.descuento.info.length > 0) ? (
+                        <tr>
+                          <td>Descuento :</td>
+                          <td>
+                            {infoOrden?.descuento.estado &&
+                            infoOrden?.descuento.info &&
+                            infoOrden?.descuento.modoDescuento === "Manual"
+                              ? formatThousandsSeparator(
+                                  infoOrden?.descuento.info.reduce(
+                                    (total, item) =>
+                                      total + parseFloat(item.descuentoMonto),
+                                    0
+                                  )
                                 )
-                              )
-                            : formatThousandsSeparator(
-                                infoOrden.descuento.monto
-                              )}
-                        </td>
-                      </tr>
+                              : formatThousandsSeparator(
+                                  infoOrden.descuento.monto
+                                )}
+                          </td>
+                        </tr>
+                      ) : null}
                       <tr>
                         <td>Total a pagar :</td>
                         <td>{formatThousandsSeparator(infoOrden.totalNeto)}</td>
@@ -465,6 +468,7 @@ const Ticket = React.forwardRef((props, ref) => {
                 {infoOrden?.descuento.estado &&
                 infoOrden?.descuento.info &&
                 infoOrden?.descuento.modoDescuento !== "Ninguno" &&
+                infoOrden?.descuento.modoDescuento !== "Manual" &&
                 !tipoTicket ? (
                   <div className="space-ahorro">
                     <h2 className="title">
@@ -535,30 +539,7 @@ const Ticket = React.forwardRef((props, ref) => {
                           )}
                         </div>
                       </div>
-                    ) : (
-                      <div className="info-manual">
-                        <span>Descuento directo :</span>
-                        <div className="body-ahorro">
-                          <div className="list-descuentos">
-                            <ul>
-                              {infoOrden?.descuento.info.map((dsc, index) => (
-                                <li key={index}>
-                                  <span>
-                                    {dsc.item}&nbsp; {simboloMoneda}
-                                    {dsc.descuentoPorcentaje}&nbsp; desct.
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          {sizePaper80 ? (
-                            <div className="img-pet">
-                              <img src={AhorroPet} alt="" />
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    )}
+                    ) : null}
                   </div>
                 ) : null}
               </div>
