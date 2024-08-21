@@ -110,10 +110,20 @@ const List = () => {
         size: 180,
       },
       {
-        accessorKey: "FechaRecepcion",
-        header: "Ingreso",
+        accessorKey: "DNI",
+        header: documento,
+        //enableSorting: false,
         mantineFilterTextInputProps: {
-          placeholder: "Fecha",
+          placeholder: documento,
+        },
+        size: 90,
+      },
+      {
+        accessorKey: "Celular",
+        header: "Celular",
+        //enableSorting: false,
+        mantineFilterTextInputProps: {
+          placeholder: "Numero",
         },
         size: 100,
       },
@@ -183,6 +193,14 @@ const List = () => {
         size: 130,
       },
       {
+        accessorKey: "FechaRecepcion",
+        header: "Ingreso",
+        mantineFilterTextInputProps: {
+          placeholder: "Fecha",
+        },
+        size: 100,
+      },
+      {
         accessorKey: "Modalidad",
         header: "Modalidad",
         //enableSorting: false,
@@ -203,15 +221,6 @@ const List = () => {
           ],
         },
         enableEditing: false,
-        size: 100,
-      },
-      {
-        accessorKey: "Celular",
-        header: "Celular",
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: "Numero",
-        },
         size: 100,
       },
       // {
@@ -292,15 +301,6 @@ const List = () => {
           placeholder: "Fecha",
         },
         size: 120,
-      },
-      {
-        accessorKey: "DNI",
-        header: documento,
-        //enableSorting: false,
-        mantineFilterTextInputProps: {
-          placeholder: documento,
-        },
-        size: 90,
       },
       {
         accessorKey: "onWaiting",
