@@ -128,6 +128,14 @@ const List = () => {
         size: 100,
       },
       {
+        accessorKey: "FechaRecepcion",
+        header: "Ingreso",
+        mantineFilterTextInputProps: {
+          placeholder: "Fecha",
+        },
+        size: 100,
+      },
+      {
         accessorKey: "items",
         header: "Items",
         mantineFilterTextInputProps: {
@@ -191,14 +199,6 @@ const List = () => {
           placeholder: "Total",
         },
         size: 130,
-      },
-      {
-        accessorKey: "FechaRecepcion",
-        header: "Ingreso",
-        mantineFilterTextInputProps: {
-          placeholder: "Fecha",
-        },
-        size: 100,
       },
       {
         accessorKey: "Modalidad",

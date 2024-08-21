@@ -15,24 +15,14 @@
     background: var(--primary-color);
     display: flex;
     padding: 0 10px;
-    // LOGO --------------->
     .svg-logo {
       width: min-content;
       height: 100%;
       max-height: 63px;
       padding: 5px 20px;
       padding-left: 5px;
-    }
-    #border-logo {
-      stroke: #fff;
-    }
-    #letter-logo {
       fill: #fff;
     }
-    #bg-logo {
-      fill: transparent;
-    }
-    // LOGO --------------->
   }
   .coord-style {
     height: 62.5px;
