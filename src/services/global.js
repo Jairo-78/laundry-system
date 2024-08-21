@@ -1,7 +1,33 @@
 // Zona Horaria
 export const timeZone = "America/Bogota";
+// Default Hora Prevista
+export const defaultHoraPrevista = "17:00";
+// Default Hora Recojo
+export const defaultHoraRecojo = "11:00";
+// Roles validaos
+export const allowedRoles = [
+  {
+    value: "admin",
+    label: "Administrador",
+  },
+  // {
+  //   value: "gerente",
+  //   label: "Gerente",
+  // },
+  {
+    value: "coord",
+    label: "Coordinador",
+  },
+  // {
+  //   value: "pers",
+  //   label: "Personal",
+  // },
+];
+
 // Factura
 export const showFactura = false;
+// Mostrar Cuantos Puntos tiene el Cliente
+export const showPuntosOnTicket = false;
 // Tipo de Moneda
 export const tipoMoneda = "COP";
 // Formato de la moneda (separacion de miles - decimales) segun la configuracion regional
