@@ -173,7 +173,6 @@ const InfoCliente = ({
             </div>
           </>
         ) : null}
-
         <hr />
         <div className="input-info-required">
           <TextInput
@@ -185,8 +184,7 @@ const InfoCliente = ({
               changeValue("name", valor);
             }}
             value={values.name}
-            readOnly={iCliente}
-            disabled={mode === "UPDATE"}
+            readOnly={mode !== "UPDATE" && iCliente}
           />
           {error.name && touched.name && ValidIco({ mensaje: error.name })}
         </div>
@@ -200,8 +198,7 @@ const InfoCliente = ({
             changeValue("direccion", valor);
           }}
           value={values.direccion}
-          readOnly={iCliente}
-          disabled={mode === "UPDATE"}
+          readOnly={mode !== "UPDATE" && iCliente}
         />
         <TextInput
           name="celular"
@@ -213,8 +210,7 @@ const InfoCliente = ({
             changeValue("celular", valor);
           }}
           value={values.celular}
-          readOnly={iCliente}
-          disabled={mode === "UPDATE"}
+          readOnly={mode !== "UPDATE" && iCliente}
         />
         <TextInput
           name="dni"
@@ -226,8 +222,7 @@ const InfoCliente = ({
             changeValue("dni", valor);
           }}
           value={values.dni}
-          readOnly={iCliente}
-          disabled={mode === "UPDATE"}
+          readOnly={mode !== "UPDATE" && iCliente}
         />
       </div>
       <Modal

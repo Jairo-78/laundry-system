@@ -11,7 +11,7 @@ import {
   GetOrdenServices_DateRange,
   GetOrdenServices_Last,
   Nota_OrdenService,
-  UpdateDetalleOrdenServices,
+  UpdateSimpleInfoOrdenServices,
 } from "../actions/aOrdenServices";
 import { handleGetInfoPago } from "../../utils/functions";
 import moment from "moment";
@@ -54,11 +54,15 @@ const service_order = createSlice({
       state.lastRegister = null;
     },
     // UPDATE INFO ORDEN
-    updateDetalleOrden: (state, action) => {
+    updateSimpleInfoOrden: (state, action) => {
       const index = state.registered.findIndex(
         (item) => item._id === action.payload._id
       );
       state.registered[index].Items = action.payload.Items;
+      state.registered[index].Nombre = action.payload.Nombre;
+      state.registered[index].direccion = action.payload.direccion;
+      state.registered[index].celular = action.payload.celular;
+      state.registered[index].dni = action.payload.dni;
     },
     updateFinishReserva: (state, action) => {
       // Quitar Orden de Reserva
@@ -255,18 +259,22 @@ const service_order = createSlice({
         state.isLoading = false;
       })
       // Update Items
-      .addCase(UpdateDetalleOrdenServices.pending, (state) => {
+      .addCase(UpdateSimpleInfoOrdenServices.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(UpdateDetalleOrdenServices.fulfilled, (state, action) => {
+      .addCase(UpdateSimpleInfoOrdenServices.fulfilled, (state, action) => {
         state.isLoading = false;
         const index = state.registered.findIndex(
           (item) => item._id === action.payload._id
         );
         state.registered[index].Items = action.payload.Items;
+        state.registered[index].Nombre = action.payload.Nombre;
+        state.registered[index].direccion = action.payload.direccion;
+        state.registered[index].celular = action.payload.celular;
+        state.registered[index].dni = action.payload.dni;
       })
-      .addCase(UpdateDetalleOrdenServices.rejected, (state) => {
+      .addCase(UpdateSimpleInfoOrdenServices.rejected, (state) => {
         state.isLoading = false;
       })
       // Finalizar Reserva
@@ -470,7 +478,7 @@ export const {
   setLastRegister,
   updateNotaOrden,
   updateLocationOrden,
-  updateDetalleOrden,
+  updateSimpleInfoOrden,
   updateFinishReserva,
   updateEntregaOrden,
   updateCancelarEntregaOrden,

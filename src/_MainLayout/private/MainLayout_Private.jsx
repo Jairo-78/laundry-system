@@ -19,7 +19,7 @@ import {
   setFilterBy,
   updateAnulacionOrden,
   updateCancelarEntregaOrden,
-  updateDetalleOrden,
+  updateSimpleInfoOrden,
   updateEntregaOrden,
   updateFinishReserva,
   updateLocationOrden,
@@ -197,7 +197,7 @@ const PrivateMasterLayout = (props) => {
     });
     // ORDEN UPDATE
     socket.on("server:updateOrder(ITEMS)", (data) => {
-      dispatch(updateDetalleOrden(data));
+      dispatch(updateSimpleInfoOrden(data));
     });
     socket.on("server:updateOrder(FINISH_RESERVA)", (data) => {
       dispatch(updateFinishReserva(data));

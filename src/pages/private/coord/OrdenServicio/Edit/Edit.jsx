@@ -3,10 +3,7 @@ import OrdenServicio from "../../../../../components/PRIVATE/OrdenServicio/Orden
 
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  UpdateDetalleOrdenServices,
-  // UpdateOrdenServices,
-} from "../../../../../redux/actions/aOrdenServices";
+import { UpdateSimpleInfoOrdenServices } from "../../../../../redux/actions/aOrdenServices";
 
 import { PrivateRoutes } from "../../../../../models";
 import "./edit.scss";
@@ -27,12 +24,17 @@ const Editar = () => {
   const handleEditarDetalle = async (updateData) => {
     setRedirect(true);
     const { infoOrden, infoPago, rol } = updateData;
-    const { Items } = infoOrden;
+    const { Items, Nombre, direccion, celular, dni, idCliente } = infoOrden;
 
     await dispatch(
-      UpdateDetalleOrdenServices({
+      UpdateSimpleInfoOrdenServices({
         id,
         infoOrden: {
+          Nombre,
+          direccion,
+          celular,
+          dni,
+          idCliente,
           Items,
           lastEdit: [
             ...ordenToUpdate.lastEdit,

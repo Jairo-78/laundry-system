@@ -129,8 +129,8 @@ export const AddOrdenServices = createAsyncThunk(
   }
 );
 
-export const UpdateDetalleOrdenServices = createAsyncThunk(
-  "service_order/UpdateDetalleOrdenServices",
+export const UpdateSimpleInfoOrdenServices = createAsyncThunk(
+  "service_order/UpdateSimpleInfoOrdenServices",
   async ({ id, infoOrden, rol }) => {
     try {
       const data = {
@@ -141,16 +141,21 @@ export const UpdateDetalleOrdenServices = createAsyncThunk(
       const response = await axios.put(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }/api/lava-ya/update-factura/detalle/${id}`,
+        }/api/lava-ya/update-factura/simple-info/${id}`,
         data
       );
 
       Notify("Actualziacion de Orden Exitosa", "", "success");
 
-      const res = response.data;
-      socket.emit("client:updateOrder(ITEMS)", res);
+      const { cliente, ordenService } = response.data;
 
-      return res;
+      socket.emit("client:updateOrder(ITEMS)", ordenService);
+      socket.emit("client:cClientes", {
+        tipoAction: "update",
+        data: cliente,
+      });
+
+      return ordenService;
     } catch (error) {
       // Puedes manejar los errores aquí
       console.log(error.response.data.mensaje);
