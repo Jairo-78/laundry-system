@@ -160,7 +160,7 @@ const InfoCliente = ({
                 type="button"
                 onClick={() => {
                   changeICliente(null);
-                  setFilterBy("nombre");
+                  setFilterBy("dni");
                   changeValue("dni", "");
                   changeValue("name", "");
                   changeValue("celular", "");
