@@ -663,7 +663,7 @@ const List = () => {
               },
             })}
             mantinePaginationProps={{
-              showRowsPerPage: false,
+              showRowsPerPage: true,
             }}
             mantineTableBodyRowProps={({ row }) => ({
               onDoubleClick: () => handleSelectRow(row.original),
@@ -697,7 +697,6 @@ const List = () => {
             }}
             enableRowVirtualization={true} // no scroll lateral
             enableRowActions={true}
-            //enableRowNumbers
             renderRowActions={({ row }) => (
               <img
                 className="ico-detail"

@@ -29,7 +29,7 @@ const InfoCliente = ({
 }) => {
   const [infoClientes, setInfoClientes] = useState([]);
   const listClientes = useSelector((state) => state.clientes.listClientes);
-  const [filterBy, setFilterBy] = useState("nombre");
+  const [filterBy, setFilterBy] = useState("dni");
   const [searchedValue, setSearchedValue] = useState("");
   // const [useSavedClients, setUseSavedClients] = useState(false);
 
@@ -174,6 +174,18 @@ const InfoCliente = ({
           </>
         ) : null}
         <hr />
+        <TextInput
+          name="dni"
+          className="input-info"
+          label={`${documento} :`}
+          autoComplete="off"
+          onChange={(e) => {
+            const valor = e.target.value;
+            changeValue("dni", valor);
+          }}
+          value={values.dni}
+          readOnly={mode !== "UPDATE" && iCliente}
+        />
         <div className="input-info-required">
           <TextInput
             name="name"
@@ -210,18 +222,6 @@ const InfoCliente = ({
             changeValue("celular", valor);
           }}
           value={values.celular}
-          readOnly={mode !== "UPDATE" && iCliente}
-        />
-        <TextInput
-          name="dni"
-          className="input-info"
-          label={`${documento} :`}
-          autoComplete="off"
-          onChange={(e) => {
-            const valor = e.target.value;
-            changeValue("dni", valor);
-          }}
-          value={values.dni}
           readOnly={mode !== "UPDATE" && iCliente}
         />
       </div>
