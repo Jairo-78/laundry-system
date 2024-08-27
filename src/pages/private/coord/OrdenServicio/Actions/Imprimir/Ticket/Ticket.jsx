@@ -43,7 +43,15 @@ const Ticket = React.forwardRef((props, ref) => {
     const mDellivery = montoDelivery();
     const mSubTotal =
       infoOrden?.Items.reduce(
-        (total, item) => total + parseFloat(item.monto),
+        (total, item) =>
+          total +
+          parseFloat(
+            infoOrden?.descuento.estado &&
+              infoOrden?.descuento.info &&
+              infoOrden?.descuento.modoDescuento === "Manual"
+              ? item.monto
+              : item.total
+          ),
         0
       ) - mDellivery;
 
